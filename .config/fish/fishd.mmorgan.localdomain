@@ -18,7 +18,6 @@ SET fish_color_quote:brown
 SET fish_color_redirection:normal
 SET fish_color_search_match:\x2d\x2dbackground\x3dpurple
 SET fish_color_valid_path:\x2d\x2dunderline
-SET_EXPORT fish_greeting:
 SET fish_key_bindings:fish\x5fdefault\x5fkey\x5fbindings
 SET fish_pager_color_completion:normal
 SET fish_pager_color_description:555\x1eyellow
