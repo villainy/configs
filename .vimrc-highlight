@@ -1,6 +1,7 @@
 highlight Folded ctermbg=0
 highlight LineNr ctermbg=0
-highlight CursorLineNr ctermbg=0
+highlight CursorLineNr cterm=bold ctermbg=235 ctermfg=2
+highlight CursorLine ctermbg=235
 highlight StatusLineNC ctermbg=0
 highlight FoldColumn ctermbg=0
 highlight SignColumn ctermbg=0
@@ -9,7 +10,6 @@ highlight TabLine ctermbg=0
 highlight TabLineSel ctermbg=0
 highlight TabLineFill ctermbg=0
 highlight CursorColumn ctermbg=0
-highlight CursorLine ctermbg=0
 highlight ColorColumn ctermbg=0
 highlight Todo ctermbg=0
 highlight GitGutterAdd ctermbg=0

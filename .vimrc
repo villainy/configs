@@ -71,6 +71,7 @@ set modeline
 set incsearch
 set nu
 set hidden
+set cursorline
 
 "let g:airline#extensions#tabline#enabled = 1
 "let g:airline#extensions#tabline#buffer_nr_show = 1
@@ -103,6 +104,8 @@ nmap <silent> <C-x> :NERDTreeToggle<CR>
 nmap <silent> <C-t> :TagbarToggle<CR>
 nmap ,f :FufFileWithCurrentBufferDir<CR>
 nmap ,b :FufBuffer<CR>
+
+vnoremap // y/<C-R>"<CR>"
 
 let g:syntastic_java_javac_config_file_enabled = 1
 let g:Tlist_Show_One_File = 1
