@@ -1,6 +1,8 @@
+" vim: set ft=vim
+
 highlight Folded ctermbg=0
 highlight LineNr ctermbg=0
-highlight CursorLineNr cterm=bold ctermbg=235 ctermfg=2
+highlight CursorLineNr cterm=bold ctermbg=235 ctermfg=15
 highlight CursorLine ctermbg=235
 highlight StatusLineNC ctermbg=0
 highlight FoldColumn ctermbg=0
@@ -41,3 +43,4 @@ highlight NERDTreeDirSlash guifg=#7cafc2
 highlight rubyAttribute guifg=#7cafc2
 highlight sassMixinName guifg=#7cafc2
 highlight SignifySignChange guifg=#7cafc2
+highlight Search ctermbg=166 ctermfg=0

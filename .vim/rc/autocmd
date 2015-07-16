@@ -1,0 +1,13 @@
+" vim: set ft=vim
+
+autocmd BufEnter *.erb,*.rhtml setf eruby
+autocmd BufEnter *.pl compiler perl
+autocmd BufEnter *.mako setf mako
+autocmd BufEnter *.cib setf pcmk
+autocmd BufEnter *.tdl setf xml
+autocmd BufEnter *.nse setf lua
+autocmd FileType python set et
+
+" run file with PHP CLI (CTRL-L)
+autocmd FileType php nmap <C-L> :w!<CR>:!/usr/bin/php %<CR>
+

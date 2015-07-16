@@ -1,0 +1,16 @@
+" vim: set ft=vim
+
+nmap <silent> <C-x> :NERDTreeToggle<CR>
+"nmap <silent> <C-w>a :bdelete<CR>
+"nmap <silent> <C-w>e :bprev<CR>
+"nmap <silent> <C-w>r :bnext<CR>
+"nmap <silent> <C-t> :TlistToggle<CR>
+nmap <silent> <C-t> :TagbarToggle<CR>
+nmap ,f :FufFileWithCurrentBufferDir<CR>
+nmap ,b :FufBuffer<CR>
+
+" search from visual mode selection
+vnoremap // y/<C-R>"<CR>"
+
+" clear search highlight
+nnoremap <esc> :noh<return><esc>

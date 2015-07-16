@@ -1,0 +1,28 @@
+" vim: set ft=vim
+
+" General VIM options
+colorscheme base16-default
+set mouse=a
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+set noexpandtab
+set autoindent
+set ignorecase
+set smartcase
+"set foldmethod=marker
+set foldmethod=indent
+set foldlevel=99
+set ruler
+set modeline
+set incsearch
+set nu
+set hidden
+set cursorline
+set encoding=utf-8
+set fillchars+=stl:\ ,stlnc:\
+set laststatus=2
+set background=dark
+set t_Co=256
+set guifont=Source\ Code\ Pro\ for\ Powerline\ 12
+
