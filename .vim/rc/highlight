@@ -2,6 +2,7 @@
 
 highlight Folded ctermbg=0
 highlight LineNr ctermbg=0
+highlight Comment term=bold ctermfg=14 guifg=#80a0ff
 highlight CursorLineNr cterm=bold ctermbg=235 ctermfg=15
 highlight CursorLine ctermbg=235
 highlight StatusLineNC ctermbg=0

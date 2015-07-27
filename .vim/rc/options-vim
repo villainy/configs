@@ -2,6 +2,8 @@
 
 " General VIM options
 colorscheme base16-default
+syntax on
+
 set mouse=a
 set shiftwidth=4
 set softtabstop=4
@@ -25,4 +27,3 @@ set laststatus=2
 set background=dark
 set t_Co=256
 set guifont=Source\ Code\ Pro\ for\ Powerline\ 12
-

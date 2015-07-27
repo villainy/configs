@@ -11,42 +11,49 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 
+" Visual
 Plugin 'bling/vim-airline'
-"Plugin 'edkolev/tmuxline.vim'
+Plugin 'edkolev/tmuxline.vim'
 Plugin 'chriskempson/base16-vim'
+
+" Navigation
 Plugin 'scrooloose/nerdtree'
-"Plugin 'kien/ctrlp.vim'
-Plugin 'scrooloose/syntastic'
-"Plugin 'taglist.vim'
 Plugin 'majutsushi/tagbar'
-Plugin 'L9'
 Plugin 'FuzzyFinder'
-Plugin 'seveas/bind.vim'
-Plugin 'tangledhelix/vim-kickstart'
-Plugin 'elzr/vim-json'
+Plugin 'kshenoy/vim-signature'
+
+" Misc
+Plugin 'tpope/vim-unimpaired'
+Plugin 'scrooloose/syntastic'
+Plugin 'L9'
 Plugin 'regedarek/ZoomWin'
-Plugin 'chase/vim-ansible-yaml'
-"Plugin 'techlivezheng/vim-plugin-minibufexpl'
-Plugin 'dag/vim-fish'
-"Plugin 'tpope/vim-pathogen'
 Plugin 'tpope/vim-fugitive'
-Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets'
+
+" Auto-completion
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'Raimondi/delimitMate'
-Plugin 'tpope/vim-unimpaired'
 Plugin 'shawncplus/phpcomplete.vim'
-Plugin 'StanAngeloff/php.vim'
-Plugin 'kshenoy/vim-signature'
-"Plugin 'henrik/vim-indexed-search'
+
+" Snippets
 Plugin 'tobyS/vmustache'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
 Plugin 'pgilad/vim-skeletons'
+
+" Syntax
+Plugin 'elzr/vim-json'
+Plugin 'dag/vim-fish'
+Plugin 'seveas/bind.vim'
+Plugin 'StanAngeloff/php.vim'
+Plugin 'chase/vim-ansible-yaml'
+Plugin 'tangledhelix/vim-kickstart'
+Plugin '2072/PHP-Indenting-for-VIm'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
-filetype plugin indent on    " required
+"filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
-"filetype plugin on
+filetype plugin on
 "
 " Brief help
 " :PluginList          - list configured plugins

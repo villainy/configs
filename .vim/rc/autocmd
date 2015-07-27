@@ -11,3 +11,12 @@ autocmd FileType python set et
 " run file with PHP CLI (CTRL-L)
 autocmd FileType php nmap <C-L> :w!<CR>:!/usr/bin/php %<CR>
 
+"function! PhpSyntaxOverride()
+"  hi! def link phpDocTags  phpDefine
+"  hi! def link phpDocParam phpType
+"endfunction
+"
+"augroup phpSyntaxOverride
+"  autocmd!
+"  autocmd FileType php call PhpSyntaxOverride()
+"augroup END
