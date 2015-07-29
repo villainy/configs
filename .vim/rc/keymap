@@ -13,5 +13,5 @@ nmap ,b :FufBuffer<CR>
 vnoremap // y/<C-R>"<CR>"
 
 " clear search highlight
-" This breaks arrow key navigation for some reason
+" This is breaking arrow key movement for some reason
 "nnoremap <esc> :noh<return><esc>
