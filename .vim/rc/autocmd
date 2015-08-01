@@ -20,3 +20,15 @@ autocmd FileType php nmap <C-L> :w!<CR>:!/usr/bin/php %<CR>
 "  autocmd!
 "  autocmd FileType php call PhpSyntaxOverride()
 "augroup END
+
+au BufNewFile,BufRead *.java    setl omnifunc=javaapi#complete
+
+au CompleteDone *.java          call javaapi#showRef()
+au BufNewFile,BufRead *.java    inoremap <expr> <c-down> javaapi#nextRef()
+au BufNewFile,BufRead *.java    inoremap <expr> <c-up>   javaapi#prevRef()
+
+if has("balloon_eval") && has("balloon_multiline") 
+	au BufNewFile,BufRead *.java  setl bexpr=javaapi#balloon()
+	au BufNewFile,BufRead *.java  setl ballooneval
+endif
+

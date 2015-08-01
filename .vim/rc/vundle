@@ -37,6 +37,14 @@ Plugin 'tobyS/vmustache'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'pgilad/vim-skeletons'
+"Java
+Plugin 'yuratomo/java-api-complete'
+Plugin 'yuratomo/java-api-javax'
+Plugin 'yuratomo/java-api-org'
+Plugin 'yuratomo/java-api-sun'
+Plugin 'yuratomo/java-api-servlet2.3'
+Plugin 'yuratomo/java-api-android'
+Plugin 'yuratomo/java-api-junit'"
 
 " Syntax
 Plugin 'elzr/vim-json'

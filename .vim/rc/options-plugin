@@ -33,3 +33,12 @@ function! <SID>ExpandSnippetOrReturn()
   endif
 endfunction
 imap <expr> <CR> pumvisible() ? "<C-R>=<SID>ExpandSnippetOrReturn()<CR>" : "<Plug>delimitMateCR"
+let g:syntastic_always_populate_loc_list = 1
+
+let g:javaapi#delay_dirs = [
+  \ 'java-api-javax',
+  \ 'java-api-org',
+  \ 'java-api-sun',
+  \ 'java-api-servlet2.3',
+  \ 'java-api-android',
+  \ ]
