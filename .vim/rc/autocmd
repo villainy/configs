@@ -1,5 +1,3 @@
-" vim: set ft=vim
-
 autocmd BufEnter *.erb,*.rhtml setf eruby
 autocmd BufEnter *.pl compiler perl
 autocmd BufEnter *.mako setf mako
@@ -8,8 +6,12 @@ autocmd BufEnter *.tdl setf xml
 autocmd BufEnter *.nse setf lua
 autocmd FileType python set et
 
+" Strip trailing whitespace from code files on save
+autocmd FileType php,pl,c,cpp,java autocmd BufWritePre <buffer> :%s/\s\+$//e"
+
 " run file with PHP CLI (CTRL-L)
-autocmd FileType php nmap <C-L> :w!<CR>:!/usr/bin/php %<CR>
+"autocmd FileType php nmap <C-L> :!/usr/bin/php %<CR>
+autocmd FileType php nmap <C-L> :Shell /usr/bin/php %<CR>
 
 "function! PhpSyntaxOverride()
 "  hi! def link phpDocTags  phpDefine
@@ -32,3 +34,4 @@ if has("balloon_eval") && has("balloon_multiline")
 	au BufNewFile,BufRead *.java  setl ballooneval
 endif
 
+" vim: set ft=vim

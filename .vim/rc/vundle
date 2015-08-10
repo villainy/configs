@@ -23,9 +23,11 @@ Plugin 'kshenoy/vim-signature'
 " Misc
 Plugin 'tpope/vim-unimpaired'
 Plugin 'scrooloose/syntastic'
+Plugin 'scrooloose/nerdcommenter'
 Plugin 'L9'
 Plugin 'regedarek/ZoomWin'
 Plugin 'tpope/vim-fugitive'
+Plugin 'airblade/vim-gitgutter'
 
 " Auto-completion
 Plugin 'Valloric/YouCompleteMe'

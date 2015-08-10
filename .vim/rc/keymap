@@ -1,5 +1,3 @@
-" vim: set ft=vim
-
 nmap <silent> <C-x> :NERDTreeToggle<CR>
 "nmap <silent> <C-w>a :bdelete<CR>
 "nmap <silent> <C-w>e :bprev<CR>
@@ -15,3 +13,9 @@ vnoremap // y/<C-R>"<CR>"
 " clear search highlight
 " This is breaking arrow key movement for some reason
 "nnoremap <esc> :noh<return><esc>
+
+" Tabularize visual mode mappings
+vmap t= :Tabularize /=<CR>
+vmap t: :Tabularize /:\zs<CR>
+
+" vim: set ft=vim
