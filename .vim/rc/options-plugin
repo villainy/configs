@@ -42,3 +42,6 @@ let g:javaapi#delay_dirs = [
   \ 'java-api-servlet2.3',
   \ 'java-api-android',
   \ ]
+
+" Default GitGitter off
+let g:gitgutter_enabled = 0
