@@ -17,6 +17,7 @@ vnoremap // y/<C-R>"<CR>"
 " Tabularize visual mode mappings
 vmap <silent> t= :Tabularize /=<CR>
 vmap <silent> t: :Tabularize /:\zs<CR>
+vmap <silent> t; :Tabularize /;\zs<CR>
 
 nmap <silent> <Leader>g :GitGutterToggle<CR>
 " vim: set ft=vim
