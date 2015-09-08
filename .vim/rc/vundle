@@ -17,6 +17,7 @@ Plugin 'chriskempson/base16-vim'
 " Navigation
 Plugin 'scrooloose/nerdtree'
 Plugin 'majutsushi/tagbar'
+Plugin 'vim-php/tagbar-phpctags.vim'
 Plugin 'FuzzyFinder'
 Plugin 'kshenoy/vim-signature'
 
