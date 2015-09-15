@@ -2,7 +2,7 @@
 colorscheme base16-default
 syntax on
 
-set mouse=a
+set mouse=
 set shiftwidth=4
 set softtabstop=4
 set tabstop=4
