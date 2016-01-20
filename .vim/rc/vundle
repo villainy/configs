@@ -19,7 +19,8 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'majutsushi/tagbar'
 Plugin 'vim-php/tagbar-phpctags.vim'
 Plugin 'FuzzyFinder'
-Plugin 'kshenoy/vim-signature'
+"Disabled. Signature is causing a weird jittery effect when YCM kicks in.
+"Plugin 'kshenoy/vim-signature'
 
 " Misc
 Plugin 'tpope/vim-unimpaired'
@@ -29,10 +30,13 @@ Plugin 'L9'
 Plugin 'regedarek/ZoomWin'
 Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
+Plugin 'KabbAmine/zeavim'
 
 " Auto-completion
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'Raimondi/delimitMate'
+"Plugin 'jiangmiao/auto-pairs'
+"Plugin 'kana/vim-smartinput'
 Plugin 'shawncplus/phpcomplete.vim'
 
 " Snippets
@@ -52,7 +56,7 @@ Plugin 'yuratomo/java-api-junit'"
 " Syntax
 Plugin 'elzr/vim-json'
 Plugin 'dag/vim-fish'
-Plugin 'seveas/bind.vim'
+"Plugin 'seveas/bind.vim'
 Plugin 'StanAngeloff/php.vim'
 Plugin 'chase/vim-ansible-yaml'
 Plugin 'tangledhelix/vim-kickstart'
@@ -74,4 +78,4 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
-" vim: set ft=vim
+" vim: ft=vim

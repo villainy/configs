@@ -1,3 +1,4 @@
+"nmap <silent> <C-[> :pop<CR>
 nmap <silent> <C-x> :NERDTreeToggle<CR>
 "nmap <silent> <C-w>a :bdelete<CR>
 "nmap <silent> <C-w>e :bprev<CR>
@@ -21,5 +22,16 @@ vmap <silent> t; :Tabularize /;\zs<CR>
 
 nmap <silent> <Leader>s :SyntasticCheck<CR>
 
-nmap <silent> <Leader>g :GitGutterToggle<CR>
-" vim: set ft=vim
+" Git stuff
+nmap <silent> <Leader>gg :GitGutterToggle<CR>
+nmap <silent> <Leader>gn :GitGutterNextHunk<CR>
+nmap <silent> <Leader>gp :GitGutterPrevHunk<CR>
+nmap <silent> <Leader>gs :Gstatus<CR>
+nmap <silent> <Leader>gc :Gcommit<CR>
+
+map <M-]> :vsp <CD>:exec("tag ".expand("<cword>"))<CR>
+
+" Toggle line wrapping
+nnoremap <silent> <leader>w :set wrap!<CR>
+
+" vim: ft=vim

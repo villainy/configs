@@ -26,4 +26,6 @@ set background=dark
 set t_Co=256
 set guifont=Source\ Code\ Pro\ for\ Powerline\ 12
 
-" vim: set ft=vim
+command W w
+
+" vim: ft=vim

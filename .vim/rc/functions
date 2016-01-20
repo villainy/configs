@@ -28,4 +28,4 @@ function! s:ExecuteInShell(command)
 endfunction
 command! -complete=shellcmd -nargs=+ Shell call s:ExecuteInShell(<q-args>)
 
-" vim: set ft=vim
+" vim: ft=vim

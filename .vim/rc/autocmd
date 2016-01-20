@@ -6,6 +6,9 @@ autocmd BufEnter *.tdl setf xml
 autocmd BufEnter *.nse setf lua
 autocmd FileType python set et
 
+" Set column 80 marker for source files
+autocmd FileType php,python,java,pl,javascript,c,cpp set colorcolumn=80
+
 " Strip trailing whitespace from code files on save
 autocmd FileType php,pl,c,cpp,java autocmd BufWritePre <buffer> :%s/\s\+$//e"
 
@@ -34,4 +37,4 @@ if has("balloon_eval") && has("balloon_multiline")
 	au BufNewFile,BufRead *.java  setl ballooneval
 endif
 
-" vim: set ft=vim
+" vim: ft=vim

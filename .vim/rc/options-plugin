@@ -1,5 +1,3 @@
-" vim: set ft=vim
-
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_buffers = 0
 let g:airline#extensions#tabline#tab_min_count = 2
@@ -10,6 +8,10 @@ let g:airline_powerline_fonts = 1
 let g:Powerline_symbols = 'fancy'
 
 let g:syntastic_java_javac_config_file_enabled = 1
+let g:syntastic_mode_map = {
+	\ "mode": "passive",
+	\ "active_filetypes": [],
+	\ "passive_filetypes": [] }
 
 let g:Tlist_Show_One_File = 1
 
@@ -23,6 +25,7 @@ let g:UltiSnipsJumpBackwardTrigger="<S-tab>"
 let g:UltiSnipsExpandTrigger="<nop>"
 let g:ulti_expand_or_jump_res = 0
 let g:snips_author = 'Michael Morgan <mmorgan@sevone.com>'
+let g:snips_copyright = 'SevOne Inc.'
 
 function! <SID>ExpandSnippetOrReturn()
   let snippet = UltiSnips#ExpandSnippetOrJump()
@@ -33,6 +36,7 @@ function! <SID>ExpandSnippetOrReturn()
   endif
 endfunction
 imap <expr> <CR> pumvisible() ? "<C-R>=<SID>ExpandSnippetOrReturn()<CR>" : "<Plug>delimitMateCR"
+"imap <expr> <CR> pumvisible() ? "<C-R>=<SID>ExpandSnippetOrReturn()<CR>" : "<CR>"
 let g:syntastic_always_populate_loc_list = 1
 
 let g:javaapi#delay_dirs = [
@@ -45,3 +49,5 @@ let g:javaapi#delay_dirs = [
 
 " Default GitGitter off
 let g:gitgutter_enabled = 0
+
+" vim: ft=vim
