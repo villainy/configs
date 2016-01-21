@@ -1,33 +1,25 @@
+" Set appropriate filetypes
 autocmd BufEnter *.erb,*.rhtml setf eruby
 autocmd BufEnter *.pl compiler perl
 autocmd BufEnter *.mako setf mako
 autocmd BufEnter *.cib setf pcmk
 autocmd BufEnter *.tdl setf xml
 autocmd BufEnter *.nse setf lua
+
+" Indent with spaces instead of tabs in python
 autocmd FileType python set et
 
 " Set column 80 marker for source files
 autocmd FileType php,python,java,pl,javascript,c,cpp set colorcolumn=80
 
 " Strip trailing whitespace from code files on save
-autocmd FileType php,pl,c,cpp,java autocmd BufWritePre <buffer> :%s/\s\+$//e"
+autocmd FileType php,python,java,pl,javascript,c,cpp autocmd BufWritePre <buffer> :%s/\s\+$//e"
 
 " run file with PHP CLI (CTRL-L)
-"autocmd FileType php nmap <C-L> :!/usr/bin/php %<CR>
 autocmd FileType php nmap <C-L> :Shell /usr/bin/php %<CR>
 
-"function! PhpSyntaxOverride()
-"  hi! def link phpDocTags  phpDefine
-"  hi! def link phpDocParam phpType
-"endfunction
-"
-"augroup phpSyntaxOverride
-"  autocmd!
-"  autocmd FileType php call PhpSyntaxOverride()
-"augroup END
-
+" Override omnifunc autocompletion for java
 au BufNewFile,BufRead *.java    setl omnifunc=javaapi#complete
-
 au CompleteDone *.java          call javaapi#showRef()
 au BufNewFile,BufRead *.java    inoremap <expr> <c-down> javaapi#nextRef()
 au BufNewFile,BufRead *.java    inoremap <expr> <c-up>   javaapi#prevRef()

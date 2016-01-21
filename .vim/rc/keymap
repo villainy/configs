@@ -1,10 +1,8 @@
-"nmap <silent> <C-[> :pop<CR>
+" NERDTree file browser
 nmap <silent> <C-x> :NERDTreeToggle<CR>
-"nmap <silent> <C-w>a :bdelete<CR>
-"nmap <silent> <C-w>e :bprev<CR>
-"nmap <silent> <C-w>r :bnext<CR>
-"nmap <silent> <C-t> :TlistToggle<CR>
+" Tagbar tag browser
 nmap <silent> <C-t> :TagbarToggle<CR>
+" Fuzzyfinder file and buffer list
 nmap ,f :FufFileWithCurrentBufferDir<CR>
 nmap ,b :FufBuffer<CR>
 
@@ -33,5 +31,8 @@ map <M-]> :vsp <CD>:exec("tag ".expand("<cword>"))<CR>
 
 " Toggle line wrapping
 nnoremap <silent> <leader>w :set wrap!<CR>
+
+" Enable perlre search
+nnoremap <leader>/ :call eregex#toggle()<CR>
 
 " vim: ft=vim

@@ -22,21 +22,15 @@ Plugin 'FuzzyFinder'
 "Disabled. Signature is causing a weird jittery effect when YCM kicks in.
 "Plugin 'kshenoy/vim-signature'
 
-" Misc
-Plugin 'tpope/vim-unimpaired'
-Plugin 'scrooloose/syntastic'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'L9'
-Plugin 'regedarek/ZoomWin'
+" Git
 Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'KabbAmine/zeavim'
 
 " Auto-completion
+"After installing YouComplete me run:
+"~/.vim/bundle/YouCompleteMe/install.py
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'Raimondi/delimitMate'
-"Plugin 'jiangmiao/auto-pairs'
-"Plugin 'kana/vim-smartinput'
 Plugin 'shawncplus/phpcomplete.vim'
 
 " Snippets
@@ -44,7 +38,7 @@ Plugin 'tobyS/vmustache'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'pgilad/vim-skeletons'
-"Java
+" Java
 Plugin 'yuratomo/java-api-complete'
 Plugin 'yuratomo/java-api-javax'
 Plugin 'yuratomo/java-api-org'
@@ -53,15 +47,25 @@ Plugin 'yuratomo/java-api-servlet2.3'
 Plugin 'yuratomo/java-api-android'
 Plugin 'yuratomo/java-api-junit'"
 
-" Syntax
+" Syntax highlighting
 Plugin 'elzr/vim-json'
 Plugin 'dag/vim-fish'
+"Bind plugin is nice, but buggy
 "Plugin 'seveas/bind.vim'
 Plugin 'StanAngeloff/php.vim'
 Plugin 'chase/vim-ansible-yaml'
 Plugin 'tangledhelix/vim-kickstart'
 Plugin '2072/PHP-Indenting-for-VIm'
 Plugin 'godlygeek/tabular'
+
+" Misc
+Plugin 'tpope/vim-unimpaired'
+Plugin 'scrooloose/syntastic'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'L9'
+Plugin 'regedarek/ZoomWin'
+Plugin 'KabbAmine/zeavim'
+Plugin 'othree/eregex.vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required

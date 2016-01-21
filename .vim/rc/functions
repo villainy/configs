@@ -1,3 +1,4 @@
+"Send command output to a new tab for easier viewing (ie :map keymap list)
 function! TabMessage(cmd)
   redir => message
   silent execute a:cmd
@@ -13,6 +14,7 @@ function! TabMessage(cmd)
 endfunction
 command! -nargs=+ -complete=command TabMessage call TabMessage(<q-args>)
 
+"Send shell command output to a new buffer
 function! s:ExecuteInShell(command)
   let command = join(map(split(a:command), 'expand(v:val)'))
   let winnr = bufwinnr('^' . command . '$')

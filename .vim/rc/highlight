@@ -1,3 +1,4 @@
+" Vim-shui? I'm fussy about my highlighting.
 highlight Folded ctermbg=0
 highlight LineNr ctermbg=0
 highlight Comment term=bold ctermfg=14 guifg=#80a0ff
@@ -43,8 +44,6 @@ highlight rubyAttribute guifg=#7cafc2
 highlight sassMixinName guifg=#7cafc2
 highlight SignifySignChange guifg=#7cafc2
 highlight Search ctermbg=166 ctermfg=0
-"Not sure if I want this permanent.. Maybe a toggle?"
-"highlight ColorColumn  term=reverse ctermbg=0 guibg=#282828
 highlight colorcolumn term=underline ctermbg=235 guibg=#282828
 
 " vim: ft=vim
