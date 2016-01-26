@@ -66,6 +66,7 @@ Plugin 'L9'
 Plugin 'regedarek/ZoomWin'
 Plugin 'KabbAmine/zeavim'
 Plugin 'othree/eregex.vim'
+Plugin 'embear/vim-foldsearch'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required

@@ -17,6 +17,7 @@ vnoremap // y/<C-R>"<CR>"
 vmap <silent> t= :Tabularize /=<CR>
 vmap <silent> t: :Tabularize /:\zs<CR>
 vmap <silent> t; :Tabularize /;\zs<CR>
+vmap <silent> t> :Tabularize /=><CR>
 
 nmap <silent> <Leader>s :SyntasticCheck<CR>
 
