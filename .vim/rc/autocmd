@@ -5,6 +5,9 @@ autocmd BufEnter *.mako setf mako
 autocmd BufEnter *.cib setf pcmk
 autocmd BufEnter *.tdl setf xml
 autocmd BufEnter *.nse setf lua
+autocmd BufEnter *.cron setf crontab
+autocmd BufNewFile,BufRead *Test.php set filetype=php.phpunit | UltiSnipsAddFiletypes php-phpunit.php<CR>
+autocmd BufNewFile,BufRead *.md set filetype=markdown
 
 " Indent with spaces instead of tabs in python
 autocmd FileType python set et

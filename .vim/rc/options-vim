@@ -23,6 +23,7 @@ set fillchars+=stl:\ ,stlnc:\
 set laststatus=2
 set background=dark
 set t_Co=256
+set listchars=tab:\|\ 
 "https://github.com/powerline/fonts/tree/master/SourceCodePro
 set guifont=Source\ Code\ Pro\ for\ Powerline\ 12
 

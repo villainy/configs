@@ -36,7 +36,7 @@ let g:UltiSnipsEditSplit="vertical"
 "default was
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<S-tab>"
-"Automatically show popup when a snippet keyword matches
+"Integrate with YCM
 let g:UltiSnipsExpandTrigger="<nop>"
 let g:ulti_expand_or_jump_res = 0
 "Local snippet vars
@@ -66,8 +66,16 @@ let g:javaapi#delay_dirs = [
 " Default GitGitter off
 let g:gitgutter_enabled = 0
 
+" Default eregex off
+let g:eregex_default_enable = 0
+
 "These do... something
 let g:tagbar_sort = 0
 let skeletons#autoRegister = 1
+
+" Fix IndentGuides highlighting for terminal
+let g:indent_guides_auto_colors = 0
+highlight IndentGuidesOdd ctermbg=234
+highlight IndentGuidesEven ctermbg=235
 
 " vim: ft=vim

@@ -10,9 +10,12 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 " Visual
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'bling/vim-airline'
 Plugin 'edkolev/tmuxline.vim'
 Plugin 'chriskempson/base16-vim'
+Plugin 'nathanaelkane/vim-indent-guides'
+Plugin 'guns/xterm-color-table.vim'
 
 " Navigation
 Plugin 'scrooloose/nerdtree'
