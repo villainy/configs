@@ -2,6 +2,8 @@
 nmap <silent> <C-x> :NERDTreeToggle<CR>
 " Tagbar tag browser
 nmap <silent> <C-t> :TagbarToggle<CR>
+" Buffergator buffer browser
+nmap <silent> <C-b> :BuffergatorToggle<CR>
 " Fuzzyfinder file and buffer list
 nmap ,f :FufFileWithCurrentBufferDir<CR>
 nmap ,b :FufBuffer<CR>
@@ -35,5 +37,8 @@ nnoremap <silent> <leader>w :set wrap!<CR>
 
 " Enable perlre search
 nnoremap <leader>/ :call eregex#toggle()<CR>
+
+" Move pop from ctrl-t
+nmap <silent> <C-}> :pop
 
 " vim: ft=vim

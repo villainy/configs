@@ -24,6 +24,7 @@ Plugin 'vim-php/tagbar-phpctags.vim'
 Plugin 'FuzzyFinder'
 "Disabled. Signature is causing a weird jittery effect when YCM kicks in.
 "Plugin 'kshenoy/vim-signature'
+Plugin 'Buffergator'
 
 " Git
 Plugin 'tpope/vim-fugitive'
@@ -58,8 +59,8 @@ Plugin 'dag/vim-fish'
 Plugin 'StanAngeloff/php.vim'
 Plugin 'chase/vim-ansible-yaml'
 Plugin 'tangledhelix/vim-kickstart'
-Plugin '2072/PHP-Indenting-for-VIm'
 Plugin 'godlygeek/tabular'
+"Plugin 'xolox/vim-easytags'
 
 " Misc
 Plugin 'tpope/vim-unimpaired'
@@ -70,6 +71,11 @@ Plugin 'regedarek/ZoomWin'
 Plugin 'KabbAmine/zeavim'
 Plugin 'othree/eregex.vim'
 Plugin 'embear/vim-foldsearch'
+Plugin '2072/PHP-Indenting-for-VIm'
+Plugin 'hynek/vim-python-pep8-indent'
+Plugin 'Rename'
+"Plugin 'xolox/vim-misc'
+Plugin 'henrik/vim-indexed-search'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required

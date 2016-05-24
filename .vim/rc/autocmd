@@ -21,6 +21,14 @@ autocmd FileType php,python,java,pl,javascript,c,cpp autocmd BufWritePre <buffer
 " run file with PHP CLI (CTRL-L)
 autocmd FileType php nmap <C-L> :Shell /usr/bin/php %<CR>
 
+autocmd FileType python
+    \ setlocal tabstop=4
+    \ softtabstop=4
+    \ shiftwidth=4
+    \ textwidth=80
+    \ smarttab
+    \ expandtab
+
 " Override omnifunc autocompletion for java
 au BufNewFile,BufRead *.java    setl omnifunc=javaapi#complete
 au CompleteDone *.java          call javaapi#showRef()

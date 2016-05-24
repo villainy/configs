@@ -26,8 +26,9 @@ set t_Co=256
 set listchars=tab:\|\ 
 "https://github.com/powerline/fonts/tree/master/SourceCodePro
 set guifont=Source\ Code\ Pro\ for\ Powerline\ 12
+set guioptions=agimrLt
 
 "Just save the file. I don't care if I fat fingered :W instead of :w
-command W w
+command! W w
 
 " vim: ft=vim
