@@ -16,10 +16,10 @@ autocmd FileType python set et
 autocmd FileType php,python,java,pl,javascript,c,cpp set colorcolumn=80
 
 " Strip trailing whitespace from code files on save
-autocmd FileType php,python,java,pl,javascript,c,cpp autocmd BufWritePre <buffer> :%s/\s\+$//e"
+"autocmd FileType php,python,java,pl,javascript,c,cpp autocmd BufWritePre <buffer> :%s/\s\+$//e"
 
 " run file with PHP CLI (CTRL-L)
-autocmd FileType php nmap <C-L> :Shell /usr/bin/php %<CR>
+autocmd BufEnter php nmap <C-L> :Shell /usr/bin/php %<CR>
 
 autocmd FileType python
     \ setlocal tabstop=4
@@ -39,5 +39,12 @@ if has("balloon_eval") && has("balloon_multiline")
 	au BufNewFile,BufRead *.java  setl bexpr=javaapi#balloon()
 	au BufNewFile,BufRead *.java  setl ballooneval
 endif
+
+" Open golang tag definition in vertical split
+au Filetype go nnoremap <C-W>[ :vsp <CR>:exe "GoDef" <CR>
+
+" Auto-close preview window after autocomplete
+"autocmd CompleteDone * pclose
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 " vim: ft=vim

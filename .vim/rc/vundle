@@ -25,13 +25,14 @@ Plugin 'FuzzyFinder'
 "Disabled. Signature is causing a weird jittery effect when YCM kicks in.
 "Plugin 'kshenoy/vim-signature'
 Plugin 'Buffergator'
+Plugin 'chazy/cscope_maps'
 
 " Git
 Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
 
 " Auto-completion
-"After installing YouComplete me run:
+"After installing YouCompleteMe run:
 "~/.vim/bundle/YouCompleteMe/install.py
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'Raimondi/delimitMate'
@@ -42,6 +43,7 @@ Plugin 'tobyS/vmustache'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'pgilad/vim-skeletons'
+Plugin 'justinj/vim-react-snippets'
 " Java
 Plugin 'yuratomo/java-api-complete'
 Plugin 'yuratomo/java-api-javax'
@@ -61,6 +63,8 @@ Plugin 'chase/vim-ansible-yaml'
 Plugin 'tangledhelix/vim-kickstart'
 Plugin 'godlygeek/tabular'
 "Plugin 'xolox/vim-easytags'
+Plugin 'pangloss/vim-javascript'
+Plugin 'mxw/vim-jsx'
 
 " Misc
 Plugin 'tpope/vim-unimpaired'
@@ -76,6 +80,14 @@ Plugin 'hynek/vim-python-pep8-indent'
 Plugin 'Rename'
 "Plugin 'xolox/vim-misc'
 Plugin 'henrik/vim-indexed-search'
+Plugin 'milkypostman/vim-togglelist'
+Plugin 'ternjs/tern_for_vim'
+Plugin 'ethanmuller/scratch.vim'
+Plugin 'sjl/gundo.vim'
+Plugin 'erig0/cscope_dynamic'
+
+"Go stuff
+Plugin 'villainy/vim-go'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required

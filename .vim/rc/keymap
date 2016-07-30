@@ -30,8 +30,6 @@ nmap <silent> <Leader>gp :GitGutterPrevHunk<CR>
 nmap <silent> <Leader>gs :Gstatus<CR>
 nmap <silent> <Leader>gc :Gcommit<CR>
 
-map <M-]> :vsp <CD>:exec("tag ".expand("<cword>"))<CR>
-
 " Toggle line wrapping
 nnoremap <silent> <leader>w :set wrap!<CR>
 
@@ -39,6 +37,13 @@ nnoremap <silent> <leader>w :set wrap!<CR>
 nnoremap <leader>/ :call eregex#toggle()<CR>
 
 " Move pop from ctrl-t
-nmap <silent> <C-}> :pop
+nmap <silent> <leader>] :pop<CR>
+
+" Open tag definition in vertical split
+map <C-W>[ :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+
+" Open scratch buffers
+nmap <C-s>w :Sscratch<CR>
+nmap <C-s>v :Vscratch<CR>
 
 " vim: ft=vim
