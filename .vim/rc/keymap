@@ -46,4 +46,10 @@ map <C-W>[ :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 nmap <C-s>w :Sscratch<CR>
 nmap <C-s>v :Vscratch<CR>
 
+" Init cscope database
+nmap <F12> <Plug>CscopeDBInit
+
+" Gundo
+nnoremap <silent> U :GundoToggle<CR>
+
 " vim: ft=vim
