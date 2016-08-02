@@ -84,7 +84,8 @@ Plugin 'milkypostman/vim-togglelist'
 Plugin 'ternjs/tern_for_vim'
 Plugin 'ethanmuller/scratch.vim'
 Plugin 'sjl/gundo.vim'
-Plugin 'erig0/cscope_dynamic'
+"Plugin 'erig0/cscope_dynamic'
+Plugin 'yssl/QFEnter'
 
 "Go stuff
 Plugin 'villainy/vim-go'
