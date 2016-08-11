@@ -86,4 +86,28 @@ set nocscopeverbose
 let g:toggle_list_copen_command="botright copen"
 
 let g:go_bin_path = '/home/mmorgan/.go/bin'
+
+" Exclude node_modules from gutentags or you'll just run out of memory have
+" have a multi-GB tags file...
+let g:gutentags_exclude = [ 'node_modules' ]
+
+" Use jsctags for tagbar javascript
+"let g:tagbar_type_javascript = {
+    "\ 'ctagsbin' : '/usr/bin/jsctags',
+    "\ 'ctagsargs' : '-f <'
+"\ }
+
+let g:tagbar_type_php = {
+	\ 'cagsbin' : '/home/mmorgan/bin/phpctags',
+	\ 'ctagsargs' : '--extensions=+.inc'
+\ }
+
+" Additional syntax from vim-go
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_types = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+
 " vim: ft=vim

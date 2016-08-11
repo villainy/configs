@@ -6,14 +6,14 @@ autocmd BufEnter *.cib setf pcmk
 autocmd BufEnter *.tdl setf xml
 autocmd BufEnter *.nse setf lua
 autocmd BufEnter *.cron setf crontab
-autocmd BufNewFile,BufRead *Test.php set filetype=php.phpunit | UltiSnipsAddFiletypes php-phpunit.php<CR>
-autocmd BufNewFile,BufRead *.md set filetype=markdown
+autocmd BufNewFile,BufRead *Test.php setf filetype=php.phpunit | UltiSnipsAddFiletypes php-phpunit.php<CR>
+autocmd BufNewFile,BufRead *.md setf filetype=markdown
 
 " Indent with spaces instead of tabs in python
-autocmd FileType python set et
+autocmd FileType python setl et
 
 " Set column 80 marker for source files
-autocmd FileType php,python,java,pl,javascript,c,cpp set colorcolumn=80
+autocmd FileType php,python,java,pl,javascript,c,cpp setl colorcolumn=80
 
 " Strip trailing whitespace from code files on save
 "autocmd FileType php,python,java,pl,javascript,c,cpp autocmd BufWritePre <buffer> :%s/\s\+$//e"
@@ -46,5 +46,10 @@ au Filetype go nnoremap <C-W>[ :vsp <CR>:exe "GoDef" <CR>
 " Auto-close preview window after autocomplete
 "autocmd CompleteDone * pclose
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+
+" JS autocompletion
+"autocmd FileType javascript setlocal omnifunc=tern#Complete
+"autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType javascript setlocal omnifunc=tern#Complete
 
 " vim: ft=vim

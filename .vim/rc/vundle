@@ -37,6 +37,7 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'Raimondi/delimitMate'
 Plugin 'shawncplus/phpcomplete.vim'
+Plugin 'ludovicchabant/vim-gutentags'
 
 " Snippets
 Plugin 'tobyS/vmustache'
