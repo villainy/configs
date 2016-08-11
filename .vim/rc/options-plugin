@@ -18,6 +18,10 @@ let g:airline_theme = 'murmur'
 let g:airline_powerline_fonts = 1
 let g:Powerline_symbols = 'fancy'
 
+"" Base16
+"set termguicolors                                                  
+let base16colorspace=256  " Access colors present in 256 colorspace
+
 "" Syntastic
 "Use java class path config file
 let g:syntastic_java_javac_config_file_enabled = 1
