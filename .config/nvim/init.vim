@@ -38,6 +38,7 @@ set laststatus=2
 set background=dark
 set listchars=tab:\|\ 
 set splitright
+set noshowmode
 " }}}
 
 " Plugins {{{
@@ -168,14 +169,45 @@ autocmd FileType python
 
 " lightline.vim {{{
 let g:lightline = {
-      \ 'colorscheme': 'murmur',
-      \ 'component': {
-      \   'readonly': '%{&readonly?"⭤":""}',
-      \ },
-      \ 'separator': { 'left': '', 'right': '' },
-      \ 'subseparator': { 'left': '', 'right': '' }
-      \ }
+			\ 'colorscheme': 'murmur',
+			\ 'active': {
+			\	'left': [ [ 'mode', 'paste' ],
+			\				[ 'fugitive', 'readonly', 'filename', 'modified' ] ]
+			\ },
+			\ 'component_function': {
+			\   'fugitive': 'LightLineFugitive',
+			\   'readonly': 'LightLineReadonly',
+			\   'modified': 'LightLineModified'
+			\ },
+			\ 'separator': { 'left': '', 'right': '' },
+			\ 'subseparator': { 'left': '', 'right': '' }
+			\ }
 
+function! LightLineModified()
+  if &filetype == "help"
+    return ""
+  elseif &modified
+    return "+"
+  elseif &modifiable
+    return ""
+  else
+    return ""
+  endif
+endfunction
+
+function! LightLineReadonly()
+  if &filetype == "help"
+    return ""
+  elseif &readonly
+    return ""
+  else
+    return ""
+  endif
+endfunction
+
+function! LightLineFugitive()
+  return exists('*fugitive#head') ? fugitive#head() : ''
+endfunction
 " }}}
 
 " base16 {{{
@@ -227,10 +259,13 @@ nmap <silent> <C-t> :TagbarToggle<CR>
 " }}}
 
 " fzf {{{
-let $FZF_DEFAULT_COMMAND = 'find .'
-nmap ,f :Files<CR>
-nmap ,F :Files $HOME<CR>
-nmap ,b :Buffers<CR>
+let $FZF_DEFAULT_COMMAND = 'find . -not -wholename "*.git/*"'
+let g:fzf_layout = { 'up': '~30%' }
+nmap ,ff :Files<CR>
+nmap ,fh :Files $HOME<CR>
+nmap ,fb :Buffers<CR>
+nmap ,fr :Files /<CR>
+nmap ,fc :Commits<CR>
 " }}}
 
 " java-api-complete {{{
@@ -361,6 +396,12 @@ highlight sassMixinName guifg=#7cafc2
 highlight SignifySignChange guifg=#7cafc2
 highlight Search ctermbg=166 ctermfg=0
 highlight colorcolumn term=underline ctermbg=235 guibg=#282828
+highlight Character ctermfg=1 guifg=#ab4642
+highlight Number ctermfg=9 guifg=#dc9656
+highlight Boolean ctermfg=9 guifg=#dc9656
+highlight Float ctermfg=9 guifg=#dc9656
+highlight SpecialChar ctermfg=14 guifg=#a16946
+highlight Delimiter ctermfg=14 guifg=#a16946
 " }}}
 
 " vim: foldmethod=marker ft=vim
