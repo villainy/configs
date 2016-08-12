@@ -2,7 +2,7 @@
 set shell=/usr/bin/bash
 
 " Use GUI colors for the terminal. Enable this when TrueColor is working
-"set termguicolors
+set termguicolors
 
 " 4 is definitely correct
 set shiftwidth=4
@@ -35,10 +35,81 @@ set cursorline
 set encoding=utf-8
 set fillchars+=stl:\ ,stlnc:\
 set laststatus=2
-set background=dark
 set listchars=tab:\|\ 
 set splitright
 set noshowmode
+" }}}
+
+" Misc functions {{{
+"Send command output to a new tab for easier viewing (ie :map keymap list)
+function! TabMessage(cmd)
+  redir => message
+  silent execute a:cmd
+  redir END
+  if empty(message)
+    echoerr "no output"
+  else
+    " use "new" instead of "tabnew" below if you prefer split windows instead of tabs
+    tabnew
+    setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted nomodified
+    silent put=message
+  endif
+endfunction
+command! -nargs=+ -complete=command TabMessage call TabMessage(<q-args>)
+
+function! g:ToggleColorColumn()
+  if &colorcolumn != ''
+    setlocal colorcolumn&
+  else
+    setlocal colorcolumn=+1
+  endif
+endfunction
+" }}}
+
+" Misc keymaps {{{
+" Toggle line wrapping
+nnoremap <silent> <leader>w :set wrap!<CR>
+
+" Move pop from ctrl-t
+nnoremap <silent> <leader>] :pop<CR>
+
+" Open tag definition in vertical split
+nnoremap <C-W>[ :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+au Filetype go nnoremap <C-W>[ :vsp <CR>:exe "GoDef" <CR>
+
+" Toggle paste
+nnoremap <silent> <F12> :set paste!<CR>
+
+" search from visual mode selection
+vnoremap // y/<C-R>"<CR>"
+
+" Toggle colorcolumn
+nnoremap <silent> <leader>tc :call g:ToggleColorColumn()<CR>
+
+" Allow saving of files as sudo when I forgot to start vim using sudo.
+cmap w!! w !sudo tee > /dev/null %
+" }}}
+
+" Filetypes {{{
+" Set appropriate filetypes
+autocmd BufEnter *.erb,*.rhtml setf eruby
+autocmd BufEnter *.mako setf mako
+autocmd BufEnter *.cib setf pcmk
+autocmd BufEnter *.tdl setf xml
+autocmd BufEnter *.nse setf lua
+autocmd BufEnter *.cron setf crontab
+autocmd BufEnter *.md setf markdown
+
+" Strip trailing whitespace from code files on save
+"autocmd FileType php,python,java,pl,javascript,c,cpp autocmd BufWritePre <buffer> :%s/\s\+$//e"
+
+" Appropriate python settings
+autocmd FileType python
+    \ setlocal tabstop=4
+    \ softtabstop=4
+    \ shiftwidth=4
+    \ smarttab
+    \ expandtab
 " }}}
 
 " Plugins {{{
@@ -46,6 +117,8 @@ call plug#begin('~/.config/nvim/plug')
  
 Plug 'chriskempson/base16-vim'                            " Base16 colors
 Plug 'villainy/murmur-lightline'                          " My murmur lightline theme adapted from airline
+Plug 'guns/xterm-color-table.vim',
+	\ { 'on': 'XtermColorTable'}                          " All 256 xterm colors with their RGB equivalents, right in Vim!
 Plug 'itchyny/lightline.vim'                              " Syntax highlighting for hackers
 Plug 'scrooloose/nerdtree'                                " A tree explorer plugin for vim.
 Plug 'scrooloose/nerdcommenter'                           " Vim plugin for intensely orgasmic commenting
@@ -93,78 +166,6 @@ Plug 'yuratomo/java-api-junit'
 call plug#end()
 " }}}
 
-" Misc functions {{{
-"Send command output to a new tab for easier viewing (ie :map keymap list)
-function! TabMessage(cmd)
-  redir => message
-  silent execute a:cmd
-  redir END
-  if empty(message)
-    echoerr "no output"
-  else
-    " use "new" instead of "tabnew" below if you prefer split windows instead of tabs
-    tabnew
-    setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted nomodified
-    silent put=message
-  endif
-endfunction
-command! -nargs=+ -complete=command TabMessage call TabMessage(<q-args>)
-
-function! g:ToggleColorColumn()
-  if &colorcolumn != ''
-    setlocal colorcolumn&
-  else
-    setlocal colorcolumn=+1
-  endif
-endfunction
-" }}}
-
-" Misc keymaps {{{
-" Toggle line wrapping
-nnoremap <silent> <leader>w :set wrap!<CR>
-
-" Move pop from ctrl-t
-nnoremap <silent> <leader>] :pop<CR>
-
-" Open tag definition in vertical split
-nnoremap <C-W>[ :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
-au Filetype go nnoremap <C-W>[ :vsp <CR>:exe "GoDef" <CR>
-
-" Toggle paste
-nnoremap <silent> <F12> :set paste!<CR>
-
-" search from visual mode selection
-vnoremap // y/<C-R>"<CR>"
-
-" Toggle colorcolumn
-nnoremap <silent> <leader>cc :call g:ToggleColorColumn()<CR>
-
-" Allow saving of files as sudo when I forgot to start vim using sudo.
-cmap w!! w !sudo tee > /dev/null %
-" }}}
-
-" Filetypes {{{
-" Set appropriate filetypes
-autocmd BufEnter *.erb,*.rhtml setf eruby
-autocmd BufEnter *.mako setf mako
-autocmd BufEnter *.cib setf pcmk
-autocmd BufEnter *.tdl setf xml
-autocmd BufEnter *.nse setf lua
-autocmd BufEnter *.cron setf crontab
-autocmd BufEnter *.md setf markdown
-
-" Strip trailing whitespace from code files on save
-"autocmd FileType php,python,java,pl,javascript,c,cpp autocmd BufWritePre <buffer> :%s/\s\+$//e"
-
-" Appropriate python settings
-autocmd FileType python
-    \ setlocal tabstop=4
-    \ softtabstop=4
-    \ shiftwidth=4
-    \ smarttab
-    \ expandtab
-" }}}
-
 " Plugin settings {{{
 
 " lightline.vim {{{
@@ -172,7 +173,8 @@ let g:lightline = {
 			\ 'colorscheme': 'murmur',
 			\ 'active': {
 			\	'left': [ [ 'mode', 'paste' ],
-			\				[ 'fugitive', 'readonly', 'filename', 'modified' ] ]
+			\				[ 'fugitive', 'readonly'],
+			\				[ 'filename', 'modified' ] ]
 			\ },
 			\ 'component_function': {
 			\   'fugitive': 'LightLineFugitive',
@@ -349,59 +351,53 @@ let g:deoplete#enable_at_startup = 1
 
 " }}}
 
-" Custom highlighting last {{{
-highlight Folded ctermbg=0
-highlight LineNr ctermbg=0
-highlight Comment term=bold ctermfg=14 guifg=#80a0ff
-highlight CursorLineNr cterm=bold ctermbg=235 ctermfg=15
-highlight CursorLine ctermbg=235
-highlight StatusLineNC ctermbg=0
-highlight FoldColumn ctermbg=0
-highlight SignColumn ctermbg=0
-highlight Pmenu ctermbg=0
-highlight TabLine ctermbg=0
-highlight TabLineSel ctermbg=0
-highlight TabLineFill ctermbg=0
-highlight CursorColumn ctermbg=0
-highlight ColorColumn ctermbg=0
-highlight Todo ctermbg=0
-highlight GitGutterAdd ctermbg=0
-highlight GitGutterChange ctermbg=0
-highlight GitGutterDelete ctermbg=0
-highlight GitGutterChangeDelete ctermbg=0
-highlight SignifySignAdd ctermbg=0
-highlight SignifySignChange ctermbg=0
-highlight SignifySignDelete ctermbg=0
-highlight PMenu ctermfg=27 ctermbg=234 guifg=#F5F5F5 guibg=#1C1C1C
-highlight PMenuSel ctermfg=15 ctermbg=27 guifg=#FFFFFF guibg=#5F87FF
-highlight VertSplit ctermfg=234 ctermbg=234
-highlight DiffAdd term=bold ctermfg=2 ctermbg=237
-highlight DiffChange term=bold ctermfg=8 ctermbg=237
-highlight DiffDelete term=bold ctermfg=1 ctermbg=237
-highlight DiffText term=reverse cterm=bold ctermfg=4 ctermbg=237
-highlight Visual term=reverse ctermbg=237 guibg=#383838
-highlight Directory guifg=#7cafc2
-highlight Question guifg=#7cafc2
-highlight Title guifg=#7cafc2
-highlight DiffText guifg=#7cafc2
-highlight Conceal guifg=#7cafc2
-highlight Function guifg=#7cafc2
-highlight Include guifg=#7cafc2
-highlight DiffLine guifg=#7cafc2
-highlight GitGutterChange guifg=#7cafc2
-highlight markdownHeadingDelimiter guifg=#7cafc2
-highlight NERDTreeDirSlash guifg=#7cafc2
-highlight rubyAttribute guifg=#7cafc2
-highlight sassMixinName guifg=#7cafc2
-highlight SignifySignChange guifg=#7cafc2
-highlight Search ctermbg=166 ctermfg=0
-highlight colorcolumn term=underline ctermbg=235 guibg=#282828
-highlight Character ctermfg=1 guifg=#ab4642
-highlight Number ctermfg=9 guifg=#dc9656
-highlight Boolean ctermfg=9 guifg=#dc9656
-highlight Float ctermfg=9 guifg=#dc9656
-highlight SpecialChar ctermfg=14 guifg=#a16946
-highlight Delimiter ctermfg=14 guifg=#a16946
-" }}}
+"" Custom highlighting last {{{
+"highlight Folded ctermbg=0
+"highlight LineNr ctermbg=0
+"highlight Comment term=bold ctermfg=14 guifg=#80a0ff
+"highlight CursorLineNr cterm=bold ctermbg=235 ctermfg=15
+"highlight CursorLine ctermbg=235
+"highlight StatusLineNC ctermbg=0
+"highlight FoldColumn ctermbg=0
+"highlight SignColumn ctermbg=0
+"highlight Pmenu ctermbg=0
+"highlight TabLine ctermbg=0
+"highlight TabLineSel ctermbg=0
+"highlight TabLineFill ctermbg=0
+"highlight CursorColumn ctermbg=0
+"highlight ColorColumn ctermbg=0
+"highlight Todo ctermbg=0
+"highlight GitGutterAdd ctermbg=0
+"highlight GitGutterChange ctermbg=0
+"highlight GitGutterDelete ctermbg=0
+"highlight GitGutterChangeDelete ctermbg=0
+"highlight SignifySignAdd ctermbg=0
+"highlight SignifySignChange ctermbg=0
+"highlight SignifySignDelete ctermbg=0
+"highlight PMenu ctermfg=27 ctermbg=234 guifg=#F5F5F5 guibg=#1C1C1C
+"highlight PMenuSel ctermfg=15 ctermbg=27 guifg=#FFFFFF guibg=#5F87FF
+"highlight VertSplit ctermfg=234 ctermbg=234
+"highlight DiffAdd term=bold ctermfg=2 ctermbg=237
+"highlight DiffChange term=bold ctermfg=8 ctermbg=237
+"highlight DiffDelete term=bold ctermfg=1 ctermbg=237
+"highlight DiffText term=reverse cterm=bold ctermfg=4 ctermbg=237
+"highlight Visual term=reverse ctermbg=237 guibg=#383838
+"highlight Directory guifg=#7cafc2
+"highlight Question guifg=#7cafc2
+"highlight Title guifg=#7cafc2
+"highlight DiffText guifg=#7cafc2
+"highlight Conceal guifg=#7cafc2
+"highlight Function guifg=#7cafc2
+"highlight Include guifg=#7cafc2
+"highlight DiffLine guifg=#7cafc2
+"highlight GitGutterChange guifg=#7cafc2
+"highlight markdownHeadingDelimiter guifg=#7cafc2
+"highlight NERDTreeDirSlash guifg=#7cafc2
+"highlight rubyAttribute guifg=#7cafc2
+"highlight sassMixinName guifg=#7cafc2
+"highlight SignifySignChange guifg=#7cafc2
+"highlight Search ctermbg=166 ctermfg=0
+"highlight colorcolumn term=underline ctermbg=235 guibg=#282828
+"" }}}
 
 " vim: foldmethod=marker ft=vim
