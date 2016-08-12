@@ -43,32 +43,34 @@ set splitright
 " Plugins {{{
 call plug#begin('~/.config/nvim/plug')
  
-Plug 'chriskempson/base16-vim'                      " Base16 colors
-Plug 'villainy/murmur-lightline'                    " My murmur lightline theme adapted from airline
-Plug 'itchyny/lightline.vim'                        " Syntax highlighting for hackers
-Plug 'scrooloose/nerdtree'                          " A tree explorer plugin for vim.
-Plug 'scrooloose/nerdcommenter'                     " Vim plugin for intensely orgasmic commenting
-Plug 'L9' | Plug 'FuzzyFinder'                      " buffer/file/command/tag/etc explorer with fuzzy matching
-Plug 'junegunn/vim-easy-align'                      " A Vim alignment plugin
-Plug 'tpope/vim-unimpaired'                         " unimpaired.vim: pairs of handy bracket
-Plug 'embear/vim-foldsearch'                        " fold away lines that don't match a specific search pattern
-Plug 'Rename'                                       " Rename a buffer within Vim and on disk
-Plug 'ethanmuller/scratch.vim'                      " Plugin to create and use a scratch Vim buffer
-Plug 'sjl/gundo.vim'                                " Gundo.vim is Vim plugin to visualize your Vim undo tree.
-Plug 'othree/eregex.vim'                            " Perl/Ruby style regexp notation for Vim
-Plug 'milkypostman/vim-togglelist'                  " Functions to toggle the [Location List] and the [Quickfix List] windows.
-Plug 'tpope/vim-fugitive'                           " fugitive.vim: a Git wrapper so awesome, it should be illegal
-Plug 'airblade/vim-gitgutter'                       " A Vim plugin which shows a git diff in the gutter (sign column) and stages/undoes hunks.
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " The ultimate snippet solution for Vim.
-Plug 'regedarek/ZoomWin'                            " Zoom in/out of windows
-Plug 'majutsushi/tagbar'                            " Vim plugin that displays tags in a window, ordered by scope
-Plug 'vim-php/tagbar-phpctags.vim'                  " Using phpctags to generate php ctags index for vim plugin tagbar.
-Plug 'yssl/QFEnter'                                 " Open a Quickfix item in a window you choose
-Plug 'neomake/neomake'                              " A plugin for asynchronous :make using Neovim's job-control functionality
-Plug 'Shougo/deoplete.nvim'                         " Dark powered asynchronous completion framework for neovim
-Plug 'villainy/vim-go', { 'for' : 'go' }            " My fork of faith/vim-go that actually works...
-Plug 'Raimondi/delimitMate'                         " insert mode auto-completion for quotes, parens, brackets, etc.
-Plug 'ludovicchabant/vim-gutentags'                 " A Vim plugin that manages your tag files
+Plug 'chriskempson/base16-vim'                            " Base16 colors
+Plug 'villainy/murmur-lightline'                          " My murmur lightline theme adapted from airline
+Plug 'itchyny/lightline.vim'                              " Syntax highlighting for hackers
+Plug 'scrooloose/nerdtree'                                " A tree explorer plugin for vim.
+Plug 'scrooloose/nerdcommenter'                           " Vim plugin for intensely orgasmic commenting
+Plug 'junegunn/vim-easy-align'                            " A Vim alignment plugin
+Plug 'tpope/vim-unimpaired'                               " unimpaired.vim: pairs of handy bracket
+Plug 'embear/vim-foldsearch'                              " fold away lines that don't match a specific search pattern
+Plug 'Rename'                                             " Rename a buffer within Vim and on disk
+Plug 'ethanmuller/scratch.vim'                            " Plugin to create and use a scratch Vim buffer
+Plug 'sjl/gundo.vim'                                      " Gundo.vim is Vim plugin to visualize your Vim undo tree.
+Plug 'othree/eregex.vim'                                  " Perl/Ruby style regexp notation for Vim
+Plug 'milkypostman/vim-togglelist'                        " Functions to toggle the [Location List] and the [Quickfix List] windows.
+Plug 'tpope/vim-fugitive'                                 " fugitive.vim: a Git wrapper so awesome, it should be illegal
+Plug 'airblade/vim-gitgutter'                             " A Vim plugin which shows a git diff in the gutter (sign column) and stages/undoes hunks.
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'       " The ultimate snippet solution for Vim.
+Plug 'regedarek/ZoomWin'                                  " Zoom in/out of windows
+Plug 'majutsushi/tagbar'                                  " Vim plugin that displays tags in a window, ordered by scope
+Plug 'vim-php/tagbar-phpctags.vim'                        " Using phpctags to generate php ctags index for vim plugin tagbar.
+Plug 'yssl/QFEnter'                                       " Open a Quickfix item in a window you choose
+Plug 'neomake/neomake'                                    " A plugin for asynchronous :make using Neovim's job-control functionality
+Plug 'Shougo/deoplete.nvim'                               " Dark powered asynchronous completion framework for neovim
+Plug 'villainy/vim-go', { 'for' : 'go' }                  " My fork of faith/vim-go that actually works...
+Plug 'Raimondi/delimitMate'                               " insert mode auto-completion for quotes, parens, brackets, etc.
+Plug 'ludovicchabant/vim-gutentags'                       " A Vim plugin that manages your tag files
+Plug 'junegunn/fzf', { 'dir': '~/.fzf',
+	\ 'do': './install --bin' } | Plug 'junegunn/fzf.vim' " A command-line fuzzy finder written in Go
+Plug 'chazy/cscope_maps'                                  " cscope keyboard mappings for VIM
 
 " Syntax highlighting
 Plug 'elzr/vim-json', { 'for' : 'json' }
@@ -224,9 +226,11 @@ nmap <silent> <C-x> :NERDTreeToggle<CR>
 nmap <silent> <C-t> :TagbarToggle<CR>
 " }}}
 
-" Fuzzyfinder {{{
-nmap ,f :FufFileWithCurrentBufferDir<CR>
-nmap ,b :FufBuffer<CR>
+" fzf {{{
+let $FZF_DEFAULT_COMMAND = 'find .'
+nmap ,f :Files<CR>
+nmap ,F :Files $HOME<CR>
+nmap ,b :Buffers<CR>
 " }}}
 
 " java-api-complete {{{
@@ -306,6 +310,8 @@ let g:gutentags_exclude = [ 'node_modules' ]
 
 " deoplete {{{
 let g:deoplete#enable_at_startup = 1
+" }}}
+
 " }}}
 
 " Custom highlighting last {{{
