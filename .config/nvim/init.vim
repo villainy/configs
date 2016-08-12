@@ -16,6 +16,10 @@ set cscopequickfix=s-,c-,d-,i-,t-,e-
 " Disable verbose cscope to hide duplicate db warnings
 set nocscopeverbose
 
+" Auto-close preview window after autocomplete
+"autocmd CompleteDone * pclose
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+
 set mouse=
 set autoindent
 set ignorecase
@@ -62,7 +66,7 @@ Plug 'vim-php/tagbar-phpctags.vim'                  " Using phpctags to generate
 Plug 'yssl/QFEnter'                                 " Open a Quickfix item in a window you choose
 Plug 'neomake/neomake'                              " A plugin for asynchronous :make using Neovim's job-control functionality
 Plug 'Shougo/deoplete.nvim'                         " Dark powered asynchronous completion framework for neovim
-Plug 'villainy/vim-go'                              " My fork of faith/vim-go that actually works...
+Plug 'villainy/vim-go', { 'for' : 'go' }            " My fork of faith/vim-go that actually works...
 Plug 'Raimondi/delimitMate'                         " insert mode auto-completion for quotes, parens, brackets, etc.
 Plug 'ludovicchabant/vim-gutentags'                 " A Vim plugin that manages your tag files
 
@@ -84,55 +88,6 @@ Plug 'yuratomo/java-api-junit'
 
 " Add plugins to &runtimepath
 call plug#end()
-" }}}
-
-" Highlighting {{{
-highlight Folded ctermbg=0
-highlight LineNr ctermbg=0
-highlight Comment term=bold ctermfg=14 guifg=#80a0ff
-highlight CursorLineNr cterm=bold ctermbg=235 ctermfg=15
-highlight CursorLine ctermbg=235
-highlight StatusLineNC ctermbg=0
-highlight FoldColumn ctermbg=0
-highlight SignColumn ctermbg=0
-highlight Pmenu ctermbg=0
-highlight TabLine ctermbg=0
-highlight TabLineSel ctermbg=0
-highlight TabLineFill ctermbg=0
-highlight CursorColumn ctermbg=0
-highlight ColorColumn ctermbg=0
-highlight Todo ctermbg=0
-highlight GitGutterAdd ctermbg=0
-highlight GitGutterChange ctermbg=0
-highlight GitGutterDelete ctermbg=0
-highlight GitGutterChangeDelete ctermbg=0
-highlight SignifySignAdd ctermbg=0
-highlight SignifySignChange ctermbg=0
-highlight SignifySignDelete ctermbg=0
-highlight PMenu ctermfg=27 ctermbg=234 guifg=#F5F5F5 guibg=#1C1C1C
-highlight PMenuSel ctermfg=15 ctermbg=27 guifg=#FFFFFF guibg=#5F87FF
-highlight VertSplit ctermfg=234 ctermbg=234
-highlight DiffAdd term=bold ctermfg=2 ctermbg=237
-highlight DiffChange term=bold ctermfg=8 ctermbg=237
-highlight DiffDelete term=bold ctermfg=1 ctermbg=237
-highlight DiffText term=reverse cterm=bold ctermfg=4 ctermbg=237
-highlight Visual term=reverse ctermbg=237 guibg=#383838
-highlight Directory guifg=#7cafc2
-highlight Question guifg=#7cafc2
-highlight Title guifg=#7cafc2
-highlight DiffText guifg=#7cafc2
-highlight Conceal guifg=#7cafc2
-highlight Function guifg=#7cafc2
-highlight Include guifg=#7cafc2
-highlight DiffLine guifg=#7cafc2
-highlight GitGutterChange guifg=#7cafc2
-highlight markdownHeadingDelimiter guifg=#7cafc2
-highlight NERDTreeDirSlash guifg=#7cafc2
-highlight rubyAttribute guifg=#7cafc2
-highlight sassMixinName guifg=#7cafc2
-highlight SignifySignChange guifg=#7cafc2
-highlight Search ctermbg=166 ctermfg=0
-highlight colorcolumn term=underline ctermbg=235 guibg=#282828
 " }}}
 
 " Misc functions {{{
@@ -180,6 +135,9 @@ vnoremap // y/<C-R>"<CR>"
 
 " Toggle colorcolumn
 nnoremap <silent> <leader>cc :call g:ToggleColorColumn()<CR>
+
+" Allow saving of files as sudo when I forgot to start vim using sudo.
+cmap w!! w !sudo tee > /dev/null %
 " }}}
 
 " Filetypes {{{
@@ -344,6 +302,59 @@ let g:go_highlight_build_constraints = 1
 " Exclude node_modules from gutentags or you'll just run out of memory have
 " have a multi-GB tags file...
 let g:gutentags_exclude = [ 'node_modules' ]
+" }}}
+
+" deoplete {{{
+let g:deoplete#enable_at_startup = 1
+" }}}
+
+" Custom highlighting last {{{
+highlight Folded ctermbg=0
+highlight LineNr ctermbg=0
+highlight Comment term=bold ctermfg=14 guifg=#80a0ff
+highlight CursorLineNr cterm=bold ctermbg=235 ctermfg=15
+highlight CursorLine ctermbg=235
+highlight StatusLineNC ctermbg=0
+highlight FoldColumn ctermbg=0
+highlight SignColumn ctermbg=0
+highlight Pmenu ctermbg=0
+highlight TabLine ctermbg=0
+highlight TabLineSel ctermbg=0
+highlight TabLineFill ctermbg=0
+highlight CursorColumn ctermbg=0
+highlight ColorColumn ctermbg=0
+highlight Todo ctermbg=0
+highlight GitGutterAdd ctermbg=0
+highlight GitGutterChange ctermbg=0
+highlight GitGutterDelete ctermbg=0
+highlight GitGutterChangeDelete ctermbg=0
+highlight SignifySignAdd ctermbg=0
+highlight SignifySignChange ctermbg=0
+highlight SignifySignDelete ctermbg=0
+highlight PMenu ctermfg=27 ctermbg=234 guifg=#F5F5F5 guibg=#1C1C1C
+highlight PMenuSel ctermfg=15 ctermbg=27 guifg=#FFFFFF guibg=#5F87FF
+highlight VertSplit ctermfg=234 ctermbg=234
+highlight DiffAdd term=bold ctermfg=2 ctermbg=237
+highlight DiffChange term=bold ctermfg=8 ctermbg=237
+highlight DiffDelete term=bold ctermfg=1 ctermbg=237
+highlight DiffText term=reverse cterm=bold ctermfg=4 ctermbg=237
+highlight Visual term=reverse ctermbg=237 guibg=#383838
+highlight Directory guifg=#7cafc2
+highlight Question guifg=#7cafc2
+highlight Title guifg=#7cafc2
+highlight DiffText guifg=#7cafc2
+highlight Conceal guifg=#7cafc2
+highlight Function guifg=#7cafc2
+highlight Include guifg=#7cafc2
+highlight DiffLine guifg=#7cafc2
+highlight GitGutterChange guifg=#7cafc2
+highlight markdownHeadingDelimiter guifg=#7cafc2
+highlight NERDTreeDirSlash guifg=#7cafc2
+highlight rubyAttribute guifg=#7cafc2
+highlight sassMixinName guifg=#7cafc2
+highlight SignifySignChange guifg=#7cafc2
+highlight Search ctermbg=166 ctermfg=0
+highlight colorcolumn term=underline ctermbg=235 guibg=#282828
 " }}}
 
 " vim: foldmethod=marker ft=vim
