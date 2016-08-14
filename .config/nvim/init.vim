@@ -4,12 +4,13 @@ set shell=/usr/bin/bash
 " Use GUI colors for the terminal. Enable this when TrueColor is working
 set termguicolors
 
-" 4 is definitely correct
-set shiftwidth=4
-set softtabstop=4
-set tabstop=4
-" Use tabs... because $dayjob...
-set noexpandtab
+" Disabled, trying out tpope/vim-sleuth
+"" 4 is definitely correct
+"set shiftwidth=4
+"set softtabstop=4
+"set tabstop=4
+"" Use tabs... because $dayjob...
+"set noexpandtab
 
 "Send cscope output to quickfix
 set cscopequickfix=s-,c-,d-,i-,t-,e-
@@ -19,6 +20,8 @@ set nocscopeverbose
 " Auto-close preview window after autocomplete
 "autocmd CompleteDone * pclose
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+
+let python_higlight_all=1
 
 set mouse=
 set autoindent
@@ -43,61 +46,61 @@ set noshowmode
 " Misc functions {{{
 "Send command output to a new tab for easier viewing (ie :map keymap list)
 function! TabMessage(cmd)
-	redir => message
-	silent execute a:cmd
-	redir END
-	if empty(message)
-		echoerr "no output"
-	else
-		" use "new" instead of "tabnew" below if you prefer split windows instead of tabs
-		tabnew
-		setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted nomodified
-		silent put=message
-	endif
+    redir => message
+    silent execute a:cmd
+    redir END
+    if empty(message)
+        echoerr "no output"
+    else
+        " use "new" instead of "tabnew" below if you prefer split windows instead of tabs
+        tabnew
+        setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted nomodified
+        silent put=message
+    endif
 endfunction
 command! -nargs=+ -complete=command TabMessage call TabMessage(<q-args>)
 
 function! g:ToggleColorColumn()
-	if &colorcolumn != ''
-		setlocal colorcolumn&
-	else
-		setlocal colorcolumn=+1
-	endif
+    if &colorcolumn != ''
+        setlocal colorcolumn&
+    else
+        setlocal colorcolumn=+1
+    endif
 endfunction
 
 " follow symlinked file
 function! FollowSymlink()
-	let current_file = expand('%:p')
-	" check if file type is a symlink
-	if getftype(current_file) == 'link'
-		" if it is a symlink resolve to the actual file path
-		"   and open the actual file
-		let actual_file = resolve(current_file)
-		silent! execute 'file ' . actual_file
-	end
+    let current_file = expand('%:p')
+    " check if file type is a symlink
+    if getftype(current_file) == 'link'
+        " if it is a symlink resolve to the actual file path
+        "   and open the actual file
+        let actual_file = resolve(current_file)
+        silent! execute 'file ' . actual_file
+    end
 endfunction
 
 " set working directory to git project root
 " or directory of current file if not git project
 function! SetProjectRoot()
-	" default to the current file's directory
-	let directory = expand('%:p:h')
-	if isdirectory(directory) && !&previewwindow
-		lcd %:p:h
-		let git_dir = system("git rev-parse --show-toplevel")
-		" See if the command output starts with 'fatal' (if it does, not in a git repo)
-		let is_not_git_dir = matchstr(git_dir, '^fatal:.*')
-		" if git project, change local directory to git project root
-		if empty(is_not_git_dir)
-			lcd `=git_dir`
-		endif
-	endif
+    " default to the current file's directory
+    let directory = expand('%:p:h')
+    if isdirectory(directory) && !&previewwindow
+        lcd %:p:h
+        let git_dir = system("git rev-parse --show-toplevel")
+        " See if the command output starts with 'fatal' (if it does, not in a git repo)
+        let is_not_git_dir = matchstr(git_dir, '^fatal:.*')
+        " if git project, change local directory to git project root
+        if empty(is_not_git_dir)
+            lcd `=git_dir`
+        endif
+    endif
 endfunction
 
 " follow symlink and set working directory
-autocmd BufRead *
-			\ call FollowSymlink() |
-			\ call SetProjectRoot()
+autocmd BufEnter *
+            \ call FollowSymlink() |
+            \ call SetProjectRoot()
 
 " }}}
 
@@ -140,45 +143,58 @@ autocmd BufEnter *.md setf markdown
 
 " Appropriate python settings
 autocmd FileType python
-			\ setlocal tabstop=4
-			\ softtabstop=4
-			\ shiftwidth=4
-			\ smarttab
-			\ expandtab
+            \ setlocal tabstop=4
+            \ softtabstop=4
+            \ shiftwidth=4
+            \ smarttab
+            \ expandtab
+
+" dart stuff
+autocmd BufEnter *.dart setf dart
+autocmd BufWritePost *.dart DartFmt
 " }}}
 
 " Plugins {{{
 call plug#begin('~/.config/nvim/plug')
 
-Plug 'chriskempson/base16-vim'                            " Base16 colors
-Plug 'villainy/murmur-lightline'                          " My murmur lightline theme adapted from airline
+Plug 'chriskempson/base16-vim'                      " Base16 colors
+Plug 'villainy/murmur-lightline'                    " My murmur lightline theme adapted from airline
 Plug 'guns/xterm-color-table.vim',
-			\ { 'on': 'XtermColorTable'}                          " All 256 xterm colors with their RGB equivalents, right in Vim!
-Plug 'itchyny/lightline.vim'                              " Syntax highlighting for hackers
-Plug 'scrooloose/nerdtree'                                " A tree explorer plugin for vim.
-Plug 'scrooloose/nerdcommenter'                           " Vim plugin for intensely orgasmic commenting
-Plug 'junegunn/vim-easy-align'                            " A Vim alignment plugin
-Plug 'tpope/vim-unimpaired'                               " unimpaired.vim: pairs of handy bracket
-Plug 'embear/vim-foldsearch'                              " fold away lines that don't match a specific search pattern
-Plug 'Rename'                                             " Rename a buffer within Vim and on disk
-Plug 'ethanmuller/scratch.vim'                            " Plugin to create and use a scratch Vim buffer
-Plug 'sjl/gundo.vim'                                      " Gundo.vim is Vim plugin to visualize your Vim undo tree.
-Plug 'othree/eregex.vim'                                  " Perl/Ruby style regexp notation for Vim
-Plug 'milkypostman/vim-togglelist'                        " Functions to toggle the [Location List] and the [Quickfix List] windows.
-Plug 'tpope/vim-fugitive'                                 " fugitive.vim: a Git wrapper so awesome, it should be illegal
-Plug 'airblade/vim-gitgutter'                             " A Vim plugin which shows a git diff in the gutter (sign column) and stages/undoes hunks.
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'       " The ultimate snippet solution for Vim.
-Plug 'majutsushi/tagbar'                                  " Vim plugin that displays tags in a window, ordered by scope
-Plug 'vim-php/tagbar-phpctags.vim'                        " Using phpctags to generate php ctags index for vim plugin tagbar.
-Plug 'yssl/QFEnter'                                       " Open a Quickfix item in a window you choose
-Plug 'neomake/neomake'                                    " A plugin for asynchronous :make using Neovim's job-control functionality
-Plug 'Shougo/deoplete.nvim'                               " Dark powered asynchronous completion framework for neovim
-Plug 'villainy/vim-go', { 'for' : 'go' }                  " My fork of faith/vim-go that actually works...
-Plug 'Raimondi/delimitMate'                               " insert mode auto-completion for quotes, parens, brackets, etc.
-Plug 'ludovicchabant/vim-gutentags'                       " A Vim plugin that manages your tag files
-Plug 'junegunn/fzf', { 'dir': '~/.fzf',
-			\ 'do': './install --bin' } | Plug 'junegunn/fzf.vim' " A command-line fuzzy finder written in Go
-Plug 'chazy/cscope_maps'                                  " cscope keyboard mappings for VIM
+            \ { 'on': 'XtermColorTable'}            " All 256 xterm colors with their RGB equivalents, right in Vim!
+Plug 'itchyny/lightline.vim'                        " Syntax highlighting for hackers
+Plug 'scrooloose/nerdtree'                          " A tree explorer plugin for vim.
+Plug 'scrooloose/nerdcommenter'                     " Vim plugin for intensely orgasmic commenting
+Plug 'junegunn/vim-easy-align'                      " A Vim alignment plugin
+Plug 'tpope/vim-unimpaired'                         " unimpaired.vim: pairs of handy bracket
+Plug 'embear/vim-foldsearch'                        " fold away lines that don't match a specific search pattern
+Plug 'Rename'                                       " Rename a buffer within Vim and on disk
+Plug 'ethanmuller/scratch.vim'                      " Plugin to create and use a scratch Vim buffer
+Plug 'sjl/gundo.vim'                                " Gundo.vim is Vim plugin to visualize your Vim undo tree.
+Plug 'othree/eregex.vim'                            " Perl/Ruby style regexp notation for Vim
+Plug 'milkypostman/vim-togglelist'                  " Functions to toggle the [Location List] and the [Quickfix List] windows.
+Plug 'tpope/vim-fugitive'                           " fugitive.vim: a Git wrapper so awesome, it should be illegal
+Plug 'airblade/vim-gitgutter'                       " A Vim plugin which shows a git diff in the gutter (sign column) and stages/undoes hunks.
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " The ultimate snippet solution for Vim.
+Plug 'majutsushi/tagbar'                            " Vim plugin that displays tags in a window, ordered by scope
+Plug 'vim-php/tagbar-phpctags.vim'                  " Using phpctags to generate php ctags index for vim plugin tagbar.
+Plug 'yssl/QFEnter'                                 " Open a Quickfix item in a window you choose
+Plug 'neomake/neomake'                              " A plugin for asynchronous :make using Neovim's job-control functionality
+Plug 'villainy/vim-go', { 'for' : 'go' }            " My fork of faith/vim-go that actually works...
+Plug 'Raimondi/delimitMate'                         " insert mode auto-completion for quotes, parens, brackets, etc.
+Plug 'ludovicchabant/vim-gutentags'                 " A Vim plugin that manages your tag files
+Plug 'junegunn/fzf', {
+            \ 'dir': '~/.fzf',
+            \ 'do': './install --bin'
+            \ } | Plug 'junegunn/fzf.vim'           " A command-line fuzzy finder written in Go
+Plug 'chazy/cscope_maps'                            " cscope keyboard mappings for VIM
+Plug 'tpope/vim-sleuth'                             " Heuristically set buffer options
+Plug 'davidhalter/jedi'                             " Awesome autocompletion and static analysis library for python.
+
+" deoplete and sources
+Plug 'Shougo/deoplete.nvim'                      " Dark powered asynchronous completion framework for neovim
+Plug 'Shougo/neco-vim', { 'for' : 'vim' }        " The vim source for neocomplete/deoplete
+Plug 'zchee/deoplete-go', { 'for' : 'go' }       " deoplete.nvim source for Go
+Plug 'zchee/deoplete-jedi', { 'for' : 'python' } " deoplete.nvim source for Python
 
 " Syntax highlighting
 Plug 'elzr/vim-json', { 'for' : 'json' }
@@ -186,6 +202,8 @@ Plug 'dag/vim-fish', { 'for' : 'fish' }
 Plug 'StanAngeloff/php.vim', { 'for' : 'php' }
 Plug 'pangloss/vim-javascript', { 'for' : 'javascript' }
 Plug 'mxw/vim-jsx', { 'for' : 'javascript' } 
+Plug 'dart-lang/dart-vim-plugin', { 'for' : 'dart' }
+Plug 'hdima/python-syntax', { 'for' : 'python' }
 
 " Java omni-complete
 Plug 'yuratomo/java-api-complete'
@@ -204,49 +222,49 @@ call plug#end()
 
 " lightline.vim {{{
 let g:lightline = {
-			\ 'colorscheme': 'murmur',
-			\ 'active': {
-			\	'left': [ [ 'mode', 'paste' ],
-			\				[ 'fugitive', 'readonly'],
-			\				[ 'filename', 'modified' ] ]
-			\ },
-			\ 'component_function': {
-			\   'fugitive': 'LightLineFugitive',
-			\   'readonly': 'LightLineReadonly',
-			\   'modified': 'LightLineModified'
-			\ },
-			\ 'separator': { 'left': '', 'right': '' },
-			\ 'subseparator': { 'left': '', 'right': '' }
-			\ }
+            \ 'colorscheme': 'murmur',
+            \ 'active': {
+            \   'left': [ [ 'mode', 'paste' ],
+            \               [ 'fugitive', 'readonly'],
+            \               [ 'filename', 'modified' ] ]
+            \ },
+            \ 'component_function': {
+            \   'fugitive': 'LightLineFugitive',
+            \   'readonly': 'LightLineReadonly',
+            \   'modified': 'LightLineModified'
+            \ },
+            \ 'separator': { 'left': '', 'right': '' },
+            \ 'subseparator': { 'left': '', 'right': '' }
+            \ }
 
 function! LightLineModified()
-	if &filetype == "help"
-		return ""
-	elseif &modified
-		return "+"
-	elseif &modifiable
-		return ""
-	else
-		return ""
-	endif
+    if &filetype == "help"
+        return ""
+    elseif &modified
+        return "+"
+    elseif &modifiable
+        return ""
+    else
+        return ""
+    endif
 endfunction
 
 function! LightLineReadonly()
-	if &filetype == "help"
-		return ""
-	elseif &readonly
-		return ""
-	else
-		return ""
-	endif
+    if &filetype == "help"
+        return ""
+    elseif &readonly
+        return ""
+    else
+        return ""
+    endif
 endfunction
 
 function! LightLineFugitive()
-	if exists("*fugitive#head")
-		let branch = fugitive#head()
-		return branch !=# '' ? ' '.branch : ''
-	endif
-	return ''
+    if exists("*fugitive#head")
+        let branch = fugitive#head()
+        return branch !=# '' ? ' '.branch : ''
+    endif
+    return ''
 endfunction
 " }}}
 
@@ -310,12 +328,12 @@ nmap ,fc :Commits<CR>
 
 " java-api-complete {{{
 let g:javaapi#delay_dirs = [
-			\ 'java-api-javax',
-			\ 'java-api-org',
-			\ 'java-api-sun',
-			\ 'java-api-servlet2.3',
-			\ 'java-api-android',
-			\ ]
+            \ 'java-api-javax',
+            \ 'java-api-org',
+            \ 'java-api-sun',
+            \ 'java-api-servlet2.3',
+            \ 'java-api-android',
+            \ ]
 
 au BufNewFile,BufRead *.java    setl omnifunc=javaapi#complete
 au CompleteDone *.java          call javaapi#showRef()
@@ -323,8 +341,8 @@ au BufNewFile,BufRead *.java    inoremap <expr> <c-down> javaapi#nextRef()
 au BufNewFile,BufRead *.java    inoremap <expr> <c-up>   javaapi#prevRef()
 
 if has("balloon_eval") && has("balloon_multiline") 
-	au BufNewFile,BufRead *.java  setl bexpr=javaapi#balloon()
-	au BufNewFile,BufRead *.java  setl ballooneval
+    au BufNewFile,BufRead *.java  setl bexpr=javaapi#balloon()
+    au BufNewFile,BufRead *.java  setl ballooneval
 endif
 " }}}
 
@@ -343,12 +361,12 @@ let g:snips_author = 'Michael Morgan <mmorgan@sevone.com>'
 let g:snips_copyright = 'SevOne Inc.'
 "Allow enter key to use a snippet
 function! <SID>ExpandSnippetOrReturn()
-	let snippet = UltiSnips#ExpandSnippetOrJump()
-	if g:ulti_expand_or_jump_res > 0
-		return snippet
-	else
-		return "\<C-Y>"
-	endif
+    let snippet = UltiSnips#ExpandSnippetOrJump()
+    if g:ulti_expand_or_jump_res > 0
+        return snippet
+    else
+        return "\<C-Y>"
+    endif
 endfunction
 imap <expr> <CR> pumvisible() ? "<C-R>=<SID>ExpandSnippetOrReturn()<CR>" : "<Plug>delimitMateCR"
 " }}}
@@ -363,8 +381,20 @@ let g:toggle_list_copen_command="botright copen"
 let g:tagbar_sort = 0
 let g:tagbar_compact = 1
 let g:tagbar_type_php = {
-			\ 'ctagsargs' : '--extensions=+.inc'
-			\ }
+            \ 'ctagsargs' : '--extensions=+.inc'
+            \ }
+let g:tagbar_type_dart = {
+            \ 'ctagsbin' : 'pub',
+            \ 'ctagsargs' : ['global', 'run', 'dart_ctags:tags', '--skip-sort', '--line-numbers'],
+            \ 'ctagstype' : 'dart',
+            \ 'kinds'     : [
+                \ 'c:classes',
+                \ 'f:function',
+                \ 'M:static method',
+                \ 'm:method',
+                \ 'i:field'
+            \ ]
+            \ }
 " }}}
 
 " vim-go {{{
