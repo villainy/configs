@@ -8,7 +8,7 @@ set termguicolors
 "" 4 is definitely correct
 "set shiftwidth=4
 "set softtabstop=4
-"set tabstop=4
+set tabstop=4
 "" Use tabs... because $dayjob...
 "set noexpandtab
 
@@ -23,7 +23,13 @@ autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 let python_higlight_all=1
 
-set mouse=
+" Don't enable mouse if we're running in screen/tmux
+if $TERM =~# '^screen'
+  set mouse=
+else
+  set mouse=a
+endif
+
 set autoindent
 set ignorecase
 set smartcase
@@ -102,6 +108,30 @@ autocmd BufEnter *
             \ call FollowSymlink() |
             \ call SetProjectRoot()
 
+" Format python with autopep8
+function! PepFmt()
+  if executable('python3-autopep8')
+    let line = line('.')
+    let col = col('.')
+    let path = expand('%')
+    if filereadable(path)
+      let joined_lines = system(printf('python3-autopep8 %s', shellescape(path)))
+      if 0 == v:shell_error
+        silent % delete _
+        silent put=joined_lines
+        silent 1 delete _
+        silent call cursor(line, col)
+      else
+        call s:cexpr('line %l\, column %c of %f: %m', joined_lines)
+      endif
+    else
+      call s:error(printf('cannot read a file: "%s"', path))
+    endif
+  else
+    call s:error('cannot execute binary file: python3-autopep8')
+  endif
+endfunction
+
 " }}}
 
 " Misc keymaps {{{
@@ -141,13 +171,14 @@ autocmd BufEnter *.md setf markdown
 " Strip trailing whitespace from code files on save
 "autocmd FileType php,python,java,pl,javascript,c,cpp autocmd BufWritePre <buffer> :%s/\s\+$//e"
 
-" Appropriate python settings
+" Python stuff
 autocmd FileType python
             \ setlocal tabstop=4
             \ softtabstop=4
             \ shiftwidth=4
             \ smarttab
             \ expandtab
+autocmd BufWritePost *.py call PepFmt()
 
 " dart stuff
 autocmd BufEnter *.dart setf dart
@@ -189,12 +220,20 @@ Plug 'junegunn/fzf', {
 Plug 'chazy/cscope_maps'                            " cscope keyboard mappings for VIM
 Plug 'tpope/vim-sleuth'                             " Heuristically set buffer options
 Plug 'davidhalter/jedi'                             " Awesome autocompletion and static analysis library for python.
+Plug 'kshenoy/vim-signature'                        " Plugin to toggle, display and navigate marks
+" This was only needed for phpcomplete-extended
+"Plug 'Shougo/vimproc.vim', {
+"      \ 'do' : ':VimProcInstall' }                   " Interactive command execution in Vim.
 
 " deoplete and sources
-Plug 'Shougo/deoplete.nvim'                      " Dark powered asynchronous completion framework for neovim
-Plug 'Shougo/neco-vim', { 'for' : 'vim' }        " The vim source for neocomplete/deoplete
-Plug 'zchee/deoplete-go', { 'for' : 'go' }       " deoplete.nvim source for Go
-Plug 'zchee/deoplete-jedi', { 'for' : 'python' } " deoplete.nvim source for Python
+Plug 'Shougo/deoplete.nvim'                            " Dark powered asynchronous completion framework for neovim
+Plug 'Shougo/neco-vim', { 'for' : 'vim' }              " The vim source for neocomplete/deoplete
+Plug 'zchee/deoplete-go', { 'for' : 'go' }             " deoplete.nvim source for Go
+Plug 'zchee/deoplete-jedi', { 'for' : 'python' }       " deoplete.nvim source for Python
+Plug '~/src/mmorgan/deoplete-dart', { 'for' : 'dart' } " deoplete.nvim source for Dart (in-progress)
+Plug 'shawncplus/phpcomplete.vim', { 'for' : 'php' }   " Improved PHP omnicompletion
+" I'd like to use this one but it's slow and buggy as sin
+"Plug 'm2mdas/phpcomplete-extended', { 'for' : 'php' }  " A fast, extensible, context aware autocomplete plugin for PHP composer projects with code inspection features.
 
 " Syntax highlighting
 Plug 'elzr/vim-json', { 'for' : 'json' }
@@ -415,61 +454,24 @@ let g:gutentags_exclude = [ 'node_modules' ]
 
 " deoplete {{{
 let g:deoplete#enable_at_startup = 1
+"call deoplete#enable_logging('DEBUG', '/home/mmorgan/tmp/deoplete.log')
+let g:deoplete#sources#dart#dart_sdk_path = '/opt/dart/dart-sdk'
+let g:deoplete#omni_patterns = {}
+"let g:deoplete#omni_patterns.php = '\h\w*\|[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
 " }}}
 
 " neomake {{{
 autocmd BufWrite * :Neomake
 " }}}
 
+" phpcomplete-extended {{{
+"let g:phpcomplete_index_composer_command = '/usr/bin/composer'
 " }}}
 
-"" Custom highlighting last {{{
-"highlight Folded ctermbg=0
-"highlight LineNr ctermbg=0
-"highlight Comment term=bold ctermfg=14 guifg=#80a0ff
-"highlight CursorLineNr cterm=bold ctermbg=235 ctermfg=15
-"highlight CursorLine ctermbg=235
-"highlight StatusLineNC ctermbg=0
-"highlight FoldColumn ctermbg=0
-"highlight SignColumn ctermbg=0
-"highlight Pmenu ctermbg=0
-"highlight TabLine ctermbg=0
-"highlight TabLineSel ctermbg=0
-"highlight TabLineFill ctermbg=0
-"highlight CursorColumn ctermbg=0
-"highlight ColorColumn ctermbg=0
-"highlight Todo ctermbg=0
-"highlight GitGutterAdd ctermbg=0
-"highlight GitGutterChange ctermbg=0
-"highlight GitGutterDelete ctermbg=0
-"highlight GitGutterChangeDelete ctermbg=0
-"highlight SignifySignAdd ctermbg=0
-"highlight SignifySignChange ctermbg=0
-"highlight SignifySignDelete ctermbg=0
-"highlight PMenu ctermfg=27 ctermbg=234 guifg=#F5F5F5 guibg=#1C1C1C
-"highlight PMenuSel ctermfg=15 ctermbg=27 guifg=#FFFFFF guibg=#5F87FF
-"highlight VertSplit ctermfg=234 ctermbg=234
-"highlight DiffAdd term=bold ctermfg=2 ctermbg=237
-"highlight DiffChange term=bold ctermfg=8 ctermbg=237
-"highlight DiffDelete term=bold ctermfg=1 ctermbg=237
-"highlight DiffText term=reverse cterm=bold ctermfg=4 ctermbg=237
-"highlight Visual term=reverse ctermbg=237 guibg=#383838
-"highlight Directory guifg=#7cafc2
-"highlight Question guifg=#7cafc2
-"highlight Title guifg=#7cafc2
-"highlight DiffText guifg=#7cafc2
-"highlight Conceal guifg=#7cafc2
-"highlight Function guifg=#7cafc2
-"highlight Include guifg=#7cafc2
-"highlight DiffLine guifg=#7cafc2
-"highlight GitGutterChange guifg=#7cafc2
-"highlight markdownHeadingDelimiter guifg=#7cafc2
-"highlight NERDTreeDirSlash guifg=#7cafc2
-"highlight rubyAttribute guifg=#7cafc2
-"highlight sassMixinName guifg=#7cafc2
-"highlight SignifySignChange guifg=#7cafc2
-"highlight Search ctermbg=166 ctermfg=0
-"highlight colorcolumn term=underline ctermbg=235 guibg=#282828
-"" }}}
+" }}}
+
+" Custom highlighting last {{{
+highlight Error ctermfg=0 ctermbg=1 guifg=#e4e4e4 guibg=#ab4642
+" }}}
 
 " vim: foldmethod=marker ft=vim
