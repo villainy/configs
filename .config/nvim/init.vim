@@ -4,13 +4,10 @@ set shell=/usr/bin/bash
 " Use GUI colors for the terminal. Enable this when TrueColor is working
 set termguicolors
 
-" Disabled, trying out tpope/vim-sleuth
-"" 4 is definitely correct
-"set shiftwidth=4
-"set softtabstop=4
+set shiftwidth=4
+set softtabstop=4
 set tabstop=4
-"" Use tabs... because $dayjob...
-"set noexpandtab
+set expandtab
 
 "Send cscope output to quickfix
 set cscopequickfix=s-,c-,d-,i-,t-,e-
@@ -30,6 +27,13 @@ else
   set mouse=a
 endif
 
+" Set encoding when vim first starts
+if has("vim_starting")
+  set encoding=utf-8
+endif
+
+set scrolljump=5 " lines to scroll when cursor leaves screen
+set scrolloff=3  " minimum lines to keep above and below cursor
 set autoindent
 set ignorecase
 set smartcase
@@ -41,7 +45,6 @@ set incsearch
 set number
 set hidden
 set cursorline
-set encoding=utf-8
 set fillchars+=stl:\ ,stlnc:\
 set laststatus=2
 set listchars=tab:\|\ 
@@ -156,6 +159,10 @@ nnoremap <silent> <leader>tc :call g:ToggleColorColumn()<CR>
 
 " Allow saving of files as sudo when I forgot to start vim using sudo.
 cmap w!! w !sudo tee > /dev/null %
+
+" Map C-c to completion in insert mode. I'd rather use C-tab or S-tab but
+" couldn't get them working right in terminal...
+inoremap <C-c> <C-x><C-o>
 " }}}
 
 " Filetypes {{{
@@ -178,11 +185,29 @@ autocmd FileType python
             \ shiftwidth=4
             \ smarttab
             \ expandtab
-autocmd BufWritePost *.py call PepFmt()
+"autocmd BufWritePost *.py call PepFmt()
 
 " dart stuff
 autocmd BufEnter *.dart setf dart
 autocmd BufWritePost *.dart DartFmt
+
+" PHP stuff
+autocmd FileType php setlocal omnifunc=phpcomplete#CompletePHP
+" The following is for PHPCD. I'd love to use it but it's buggy as sin :( {{{
+"autocmd FileType php call SetPHPCompleter()
+"autocmd BufEnter *.php call SetPHPCompleter()
+
+"function! SetPHPCompleter()
+  ""If this is a composer project and update/install has run then use PHPCD
+  "if filereadable(getcwd().'/composer.lock')
+    "setlocal omnifunc=phpcd#CompletePHP
+  ""Otherwise use phpcomplete
+  "else
+    "setlocal omnifunc=phpcomplete#CompletePHP
+  "endif
+"endfunction
+"}}}
+
 " }}}
 
 " Plugins {{{
@@ -221,9 +246,21 @@ Plug 'chazy/cscope_maps'                            " cscope keyboard mappings f
 Plug 'tpope/vim-sleuth'                             " Heuristically set buffer options
 Plug 'davidhalter/jedi'                             " Awesome autocompletion and static analysis library for python.
 Plug 'kshenoy/vim-signature'                        " Plugin to toggle, display and navigate marks
-" This was only needed for phpcomplete-extended
-"Plug 'Shougo/vimproc.vim', {
-"      \ 'do' : ':VimProcInstall' }                   " Interactive command execution in Vim.
+
+" Padawan is nice but doesn't seem to handle completion for builtins
+"if filereadable($HOME."/.composer/vendor/bin/padawan-server")
+  "Plug 'mkusher/padawan.vim', { 'for' : 'php' }     " A vim plugin for padawan.php completion server
+"endif
+
+" This seems to be the best completion for PHP. Handles builtins and indexes
+" Composer projects. Have to keep an eye on the PHPCD processes.  It's buggy
+" and regularly crashes vim completely. Shame...
+"Plug 'phpvim/phpcd.vim', {
+      "\ 'for': 'php' , 
+      "\ 'do': 'composer update' } " PHP Completion Daemon for Vim
+" Guess I'm sticking to old stable phpcomplete for now
+Plug 'shawncplus/phpcomplete.vim', { 'for' : 'php' }   " Improved PHP omnicompletion
+
 
 " deoplete and sources
 Plug 'Shougo/deoplete.nvim'                            " Dark powered asynchronous completion framework for neovim
@@ -231,9 +268,6 @@ Plug 'Shougo/neco-vim', { 'for' : 'vim' }              " The vim source for neoc
 Plug 'zchee/deoplete-go', { 'for' : 'go' }             " deoplete.nvim source for Go
 Plug 'zchee/deoplete-jedi', { 'for' : 'python' }       " deoplete.nvim source for Python
 Plug '~/src/mmorgan/deoplete-dart', { 'for' : 'dart' } " deoplete.nvim source for Dart (in-progress)
-Plug 'shawncplus/phpcomplete.vim', { 'for' : 'php' }   " Improved PHP omnicompletion
-" I'd like to use this one but it's slow and buggy as sin
-"Plug 'm2mdas/phpcomplete-extended', { 'for' : 'php' }  " A fast, extensible, context aware autocomplete plugin for PHP composer projects with code inspection features.
 
 " Syntax highlighting
 Plug 'elzr/vim-json', { 'for' : 'json' }
@@ -455,9 +489,13 @@ let g:gutentags_exclude = [ 'node_modules' ]
 " deoplete {{{
 let g:deoplete#enable_at_startup = 1
 "call deoplete#enable_logging('DEBUG', '/home/mmorgan/tmp/deoplete.log')
-let g:deoplete#sources#dart#dart_sdk_path = '/opt/dart/dart-sdk'
 let g:deoplete#omni_patterns = {}
 "let g:deoplete#omni_patterns.php = '\h\w*\|[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+
+"Dart
+let g:deoplete#sources#dart#dart_sdk_path = '/opt/dart/dart-sdk'
+let g:deoplete#sources#dart#dart_analysis_server_flags = '--enable-instrumentation --instrumentation-log-file /tmp/dart_analysis.log --port 15151'
+
 " }}}
 
 " neomake {{{
@@ -465,7 +503,18 @@ autocmd BufWrite * :Neomake
 " }}}
 
 " phpcomplete-extended {{{
-"let g:phpcomplete_index_composer_command = '/usr/bin/composer'
+let g:phpcomplete_index_composer_command = '/usr/bin/composer'
+" }}}
+
+" padawan.vim {{{
+"let $PATH=$PATH . ':' . expand('~/.composer/vendor/bin')
+"let g:padawan#composer_command = "/usr/bin/php /usr/bin/composer"
+"let g:padawan#cli = '/usr/bin/php '.$HOME.'/.composer/vendor/bin/padawan'
+"let g:padawan#server_command = '/usr/bin/php '.$HOME.'/.composer/vendor/bin/padawan-server'
+" }}}
+
+" phpcd.vim {{{
+let g:phpcd_php_cli_executable = '/usr/bin/php'
 " }}}
 
 " }}}
