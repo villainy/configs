@@ -43,6 +43,7 @@ set ruler
 set modeline
 set incsearch
 set number
+set relativenumber
 set hidden
 set cursorline
 set fillchars+=stl:\ ,stlnc:\
@@ -243,7 +244,7 @@ Plug 'junegunn/fzf', {
             \ 'do': './install --bin'
             \ } | Plug 'junegunn/fzf.vim'           " A command-line fuzzy finder written in Go
 Plug 'chazy/cscope_maps'                            " cscope keyboard mappings for VIM
-Plug 'tpope/vim-sleuth'                             " Heuristically set buffer options
+"Plug 'tpope/vim-sleuth'                             " Heuristically set buffer options
 Plug 'davidhalter/jedi'                             " Awesome autocompletion and static analysis library for python.
 Plug 'kshenoy/vim-signature'                        " Plugin to toggle, display and navigate marks
 
@@ -277,6 +278,7 @@ Plug 'pangloss/vim-javascript', { 'for' : 'javascript' }
 Plug 'mxw/vim-jsx', { 'for' : 'javascript' } 
 Plug 'dart-lang/dart-vim-plugin', { 'for' : 'dart' }
 Plug 'hdima/python-syntax', { 'for' : 'python' }
+Plug 'sheerun/vim-polyglot' " A solid language pack for Vim.
 
 " Java omni-complete
 Plug 'yuratomo/java-api-complete'
@@ -397,6 +399,7 @@ nmap ,fh :Files $HOME<CR>
 nmap ,fb :Buffers<CR>
 nmap ,fr :Files /<CR>
 nmap ,fc :Commits<CR>
+nmap ,fs :Snippets<CR>
 " }}}
 
 " java-api-complete {{{
@@ -519,8 +522,18 @@ let g:phpcd_php_cli_executable = '/usr/bin/php'
 
 " }}}
 
-" Custom highlighting last {{{
+" Custom highlighting {{{
 highlight Error ctermfg=0 ctermbg=1 guifg=#e4e4e4 guibg=#ab4642
+" }}}
+
+" Load local configs {{{
+function! LoadLocalConfig()
+  if filereadable(getcwd().'/.vimrc.local')
+    source getcwd().'/.vimrc.local'
+  endif
+endfunction
+
+autocmd BufReadPre * call LoadLocalConfig()
 " }}}
 
 " vim: foldmethod=marker ft=vim
