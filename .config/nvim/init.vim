@@ -164,6 +164,10 @@ cmap w!! w !sudo tee > /dev/null %
 " Map C-c to completion in insert mode. I'd rather use C-tab or S-tab but
 " couldn't get them working right in terminal...
 inoremap <C-c> <C-x><C-o>
+
+" Toggle line numbers/relative numbers
+nnoremap <silent> <leader>nn :set nu!<CR>
+nnoremap <silent> <leader>nr :set rnu!<CR>
 " }}}
 
 " Filetypes {{{
@@ -232,6 +236,7 @@ Plug 'milkypostman/vim-togglelist'                  " Functions to toggle the [L
 Plug 'tpope/vim-fugitive'                           " fugitive.vim: a Git wrapper so awesome, it should be illegal
 Plug 'airblade/vim-gitgutter'                       " A Vim plugin which shows a git diff in the gutter (sign column) and stages/undoes hunks.
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " The ultimate snippet solution for Vim.
+" https://github.com/neovim/neovim/issues/5817
 Plug 'majutsushi/tagbar'                            " Vim plugin that displays tags in a window, ordered by scope
 Plug 'vim-php/tagbar-phpctags.vim'                  " Using phpctags to generate php ctags index for vim plugin tagbar.
 Plug 'yssl/QFEnter'                                 " Open a Quickfix item in a window you choose
@@ -279,6 +284,7 @@ Plug 'mxw/vim-jsx', { 'for' : 'javascript' }
 Plug 'dart-lang/dart-vim-plugin', { 'for' : 'dart' }
 Plug 'hdima/python-syntax', { 'for' : 'python' }
 Plug 'sheerun/vim-polyglot' " A solid language pack for Vim.
+Plug 'pearofducks/ansible-vim'
 
 " Java omni-complete
 Plug 'yuratomo/java-api-complete'
@@ -387,10 +393,6 @@ nmap <C-s>v :Vscratch<CR>
 nmap <silent> <C-x> :NERDTreeToggle<CR>
 " "}}}
 
-" Tagbar {{{
-nmap <silent> <C-t> :TagbarToggle<CR>
-" }}}
-
 " fzf {{{
 let $FZF_DEFAULT_COMMAND = 'find . -not -wholename "*.git/*"'
 let g:fzf_layout = { 'up': '~30%' }
@@ -453,6 +455,7 @@ let g:toggle_list_copen_command="botright copen"
 " }}}
 
 " Tagbar {{{
+nmap <silent> <C-t> :TagbarToggle<CR>
 " Add .inc files for $dayjob
 let g:tagbar_sort = 0
 let g:tagbar_compact = 1
@@ -486,7 +489,7 @@ let g:go_highlight_build_constraints = 1
 " gutentags {{{
 " Exclude node_modules from gutentags or you'll just run out of memory have
 " have a multi-GB tags file...
-let g:gutentags_exclude = [ 'node_modules' ]
+let g:gutentags_ctags_exclude = [ 'node_modules' ]
 " }}}
 
 " deoplete {{{
