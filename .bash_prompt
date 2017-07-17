@@ -1,0 +1,158 @@
+color_default='\e[39m'
+color_black='\e[30m'
+color_red='\e[31m'
+color_green='\e[32m'
+color_yellow='\e[33m'
+color_blue='\e[34m'
+color_magenta='\e[35m'
+color_cyan='\e[36m'
+color_ltgray='\e[37m'
+color_dkgray='\e[90m'
+color_ltred='\e[91m'
+color_ltgreen='\e[92m'
+color_ltyellow='\e[93m'
+color_ltblue='\e[94m'
+color_ltmagenta='\e[95m'
+color_ltcyan='\e[96m'
+color_white='\e[97m'
+bgcolor_default='\e[49m'
+bgcolor_black='\e[40m'
+bgcolor_red='\e[41m'
+bgcolor_green='\e[42m'
+bgcolor_yellow='\e[43m'
+bgcolor_blue='\e[44m'
+bgcolor_magenta='\e[45m'
+bgcolor_cyan='\e[46m'
+bgcolor_ltgray='\e[47m'
+bgcolor_dkgray='\e[100m'
+bgcolor_ltred='\e[101m'
+bgcolor_ltgreen='\e[102m'
+bgcolor_ltyellow='\e[103m'
+bgcolor_ltblue='\e[104m'
+bgcolor_ltmagenta='\e[105m'
+bgcolor_ltcyan='\e[106m'
+bgcolor_white='\e[107m'
+
+# get current branch in git repo
+function parse_git_branch() {
+	BRANCH=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
+	if [ ! "${BRANCH}" == "" ]
+	then
+		STAT=`parse_git_dirty`
+		echo -e "${BRANCH}${STAT} "
+	else
+		echo ""
+	fi
+}
+
+# get current status of git repo
+function parse_git_dirty {
+	status=`git status 2>&1 | tee`
+	dirty=`echo -n "${status}" 2> /dev/null | grep "modified:" &> /dev/null; echo "$?"`
+	untracked=`echo -n "${status}" 2> /dev/null | grep "Untracked files" &> /dev/null; echo "$?"`
+	ahead=`echo -n "${status}" 2> /dev/null | grep "Your branch is ahead of" &> /dev/null; echo "$?"`
+	newfile=`echo -n "${status}" 2> /dev/null | grep "new file:" &> /dev/null; echo "$?"`
+	renamed=`echo -n "${status}" 2> /dev/null | grep "renamed:" &> /dev/null; echo "$?"`
+	deleted=`echo -n "${status}" 2> /dev/null | grep "deleted:" &> /dev/null; echo "$?"`
+	bits=''
+	if [ "${renamed}" == "0" ]; then
+		bits=">${bits}"
+	fi
+	if [ "${ahead}" == "0" ]; then
+		bits="*${bits}"
+	fi
+	if [ "${newfile}" == "0" ]; then
+		bits="+${bits}"
+	fi
+	if [ "${untracked}" == "0" ]; then
+		bits="?${bits}"
+	fi
+	if [ "${deleted}" == "0" ]; then
+		bits="x${bits}"
+	fi
+	if [ "${dirty}" == "0" ]; then
+		bits="!${bits}"
+	fi
+	if [ ! "${bits}" == "" ]; then
+		echo "${bits}"
+	else
+		echo ""
+	fi
+}
+
+function short_pwd {
+    toplevel=$(git rev-parse --show-toplevel 2>/dev/null)
+    if [ ! -z "${toplevel}" ];then
+        repo=$(echo -n $toplevel | awk -F/ '{print $NF}')
+        longpwd=$(pwd|sed -e "s#^${toplevel}#${repo}#")
+        parts=($(echo ${longpwd}|sed -e 's/\s/#\&#/g' -e 's#/# #g'))
+        len=${#parts[@]}
+        shortpwd="\[${color_yellow}\]${parts[0]}\[${color_default}\]"
+    elif [ "$(pwd)" == "/" ];then
+        longpwd="/"
+        len=0
+    else
+        longpwd=$(pwd|sed -e "s#${HOME}#~#")
+        parts=($(echo -n ${longpwd}|sed -e 's/\s/#\&#/g' -e 's#/# #g'))
+        len=${#parts[@]}
+        shortpwd=${parts[0]:0:1}
+        if [ "${shortpwd:0:1}" != "~" ];then
+            shortpwd="/${shortpwd}"
+        fi
+    fi
+
+    if [ $len -eq 0 ];then
+        echo $longpwd
+    elif [ $len -gt 1 ];then
+        for part in $(seq 1 $(( $len - 2 )) );do
+            shortpwd="${shortpwd}/${parts[${part}]:0:1}"
+        done
+        lastpart=$(echo ${parts[-1]}|sed -e 's/#&#/ /g')
+        shortpwd="${shortpwd}/\[${color_yellow}\]${lastpart}\[${color_default}\]"
+    fi
+
+    echo -e $shortpwd
+}
+
+#function timer_start {
+    #timer=${timer:-$SECONDS}
+#}
+
+#function timer_stop {
+    #timer_show=$(($SECONDS - $timer))
+    #if [ $timer_show -le 1 ];then
+        #timer_show=''
+    #fi
+
+    #unset timer
+#}
+
+#trap 'timer_start' DEBUG
+
+function right_prompt {
+    exit_code=$?
+    if [ $exit_code -eq 0 ];then
+        unset exit_code
+    fi
+
+    pad=${COLUMNS}
+    git=$(parse_git_branch)
+    
+    pad=$(( $pad - $(echo -n "${git} ${exit_code}"|wc -c) ))
+
+    printf "%${pad}s${git}${color_red}${exit_code}${color_default}\r"
+}
+
+function bash_prompt {
+    right_prompt
+    PS1="\[${color_green}\]\u\[${color_default}\]"
+    if [ ! -z "$SSH_CLIENT" ];then
+        PS1="${PS1}\[${color_cyan}\]@\h \[${color_default}\]"
+    fi
+
+    PS1="${PS1}$(short_pwd)\[${color_default}\] \$ "
+}
+
+PROMPT_COMMAND="bash_prompt"
+
+# vim: ft=sh

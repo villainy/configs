@@ -238,7 +238,8 @@ Plug 'airblade/vim-gitgutter'                       " A Vim plugin which shows a
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " The ultimate snippet solution for Vim.
 " https://github.com/neovim/neovim/issues/5817
 Plug 'majutsushi/tagbar'                            " Vim plugin that displays tags in a window, ordered by scope
-Plug 'vim-php/tagbar-phpctags.vim'                  " Using phpctags to generate php ctags index for vim plugin tagbar.
+Plug 'vim-php/tagbar-phpctags.vim',
+            \ { 'do': 'make' }                      " Using phpctags to generate php ctags index for vim plugin tagbar.
 Plug 'yssl/QFEnter'                                 " Open a Quickfix item in a window you choose
 Plug 'neomake/neomake'                              " A plugin for asynchronous :make using Neovim's job-control functionality
 Plug 'villainy/vim-go', { 'for' : 'go' }            " My fork of faith/vim-go that actually works...
@@ -285,6 +286,7 @@ Plug 'dart-lang/dart-vim-plugin', { 'for' : 'dart' }
 Plug 'hdima/python-syntax', { 'for' : 'python' }
 Plug 'sheerun/vim-polyglot' " A solid language pack for Vim.
 Plug 'pearofducks/ansible-vim'
+Plug 'ekalinin/Dockerfile.vim'
 
 " Java omni-complete
 Plug 'yuratomo/java-api-complete'
