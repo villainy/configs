@@ -289,11 +289,8 @@ Plug 'dart-lang/dart-vim-plugin', { 'for' : 'dart' }
 Plug 'hdima/python-syntax', { 'for' : 'python' }
 Plug 'sheerun/vim-polyglot' " A solid language pack for Vim.
 Plug 'pearofducks/ansible-vim'
-<<<<<<< HEAD
 Plug 'ekalinin/Dockerfile.vim'
-=======
 Plug 'freitass/todo.txt-vim', { 'for': 'todo' }
->>>>>>> dc6793cd1fa34c5c31565dcd2ebf5d0508384f58
 
 " Java omni-complete
 Plug 'yuratomo/java-api-complete'
