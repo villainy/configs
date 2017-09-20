@@ -136,6 +136,9 @@ function! PepFmt()
   endif
 endfunction
 
+" W also w's
+command W write
+
 " }}}
 
 " Misc keymaps {{{
@@ -236,6 +239,7 @@ Plug 'milkypostman/vim-togglelist'                  " Functions to toggle the [L
 Plug 'tpope/vim-fugitive'                           " fugitive.vim: a Git wrapper so awesome, it should be illegal
 Plug 'airblade/vim-gitgutter'                       " A Vim plugin which shows a git diff in the gutter (sign column) and stages/undoes hunks.
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " The ultimate snippet solution for Vim.
+" TagBar seems to be crashing neovim even after this issue...
 " https://github.com/neovim/neovim/issues/5817
 Plug 'majutsushi/tagbar'                            " Vim plugin that displays tags in a window, ordered by scope
 Plug 'vim-php/tagbar-phpctags.vim'                  " Using phpctags to generate php ctags index for vim plugin tagbar.
@@ -285,7 +289,11 @@ Plug 'dart-lang/dart-vim-plugin', { 'for' : 'dart' }
 Plug 'hdima/python-syntax', { 'for' : 'python' }
 Plug 'sheerun/vim-polyglot' " A solid language pack for Vim.
 Plug 'pearofducks/ansible-vim'
+<<<<<<< HEAD
 Plug 'ekalinin/Dockerfile.vim'
+=======
+Plug 'freitass/todo.txt-vim', { 'for': 'todo' }
+>>>>>>> dc6793cd1fa34c5c31565dcd2ebf5d0508384f58
 
 " Java omni-complete
 Plug 'yuratomo/java-api-complete'
@@ -403,6 +411,8 @@ nmap ,fb :Buffers<CR>
 nmap ,fr :Files /<CR>
 nmap ,fc :Commits<CR>
 nmap ,fs :Snippets<CR>
+nmap ,ft :BTags<CR>
+nmap ,fT :Tags<CR>
 " }}}
 
 " java-api-complete {{{
@@ -491,6 +501,7 @@ let g:go_highlight_build_constraints = 1
 " Exclude node_modules from gutentags or you'll just run out of memory have
 " have a multi-GB tags file...
 let g:gutentags_ctags_exclude = [ 'node_modules' ]
+"let g:gutentags_enabled = 0
 " }}}
 
 " deoplete {{{
