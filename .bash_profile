@@ -11,4 +11,4 @@ PATH=$PATH:$HOME/.local/bin:$HOME/bin:$HOME/.fzf/bin
 
 export PATH
 [ -e $HOME/.fzf/shell/key-bindings.bash ] && . $HOME/.fzf/shell/key-bindings.bash
-which screenfetch 2>/dev/null && screenfetch
+which screenfetch &>/dev/null && screenfetch
