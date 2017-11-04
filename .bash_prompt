@@ -137,10 +137,12 @@ function right_prompt {
 
     pad=${COLUMNS}
     git=$(parse_git_branch)
+    virtualenv=
+    [ ! -z $VIRTUAL_ENV ] && virtualenv="py:"$(basename $VIRTUAL_ENV)" "
     
-    pad=$(( $pad - $(echo -n "${git} ${exit_code}"|wc -c) ))
+    pad=$(( $pad - $(echo -n "${git} ${virtualenv} ${exit_code}"|wc -c) ))
 
-    printf "%${pad}s${git}${color_red}${exit_code}${color_default}\r"
+    printf "%${pad}s${git}${virtualenv}${color_red}${exit_code}${color_default}\r"
 }
 
 function bash_prompt {
