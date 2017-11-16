@@ -257,6 +257,7 @@ Plug 'chazy/cscope_maps'                            " cscope keyboard mappings f
 "Plug 'tpope/vim-sleuth'                             " Heuristically set buffer options
 Plug 'davidhalter/jedi'                             " Awesome autocompletion and static analysis library for python.
 Plug 'kshenoy/vim-signature'                        " Plugin to toggle, display and navigate marks
+Plug 'tpope/vim-abolish'                            " Working with variants of a word
 
 " Padawan is nice but doesn't seem to handle completion for builtins
 "if filereadable($HOME."/.composer/vendor/bin/padawan-server")
@@ -511,6 +512,11 @@ let g:deoplete#omni_patterns = {}
 "Dart
 let g:deoplete#sources#dart#dart_sdk_path = '/opt/dart/dart-sdk'
 let g:deoplete#sources#dart#dart_analysis_server_flags = '--enable-instrumentation --instrumentation-log-file /tmp/dart_analysis.log --port 15151'
+
+"Python
+let g:deoplete#sources#jedi#extra_path = [
+    \ '/usr/lib/python2.7/site-packages/',
+    \ '/home/mmorgan/.local/lib/python2.7/site-packages/' ]
 
 " }}}
 
