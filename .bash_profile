@@ -13,3 +13,5 @@ export PATH
 [ -e $HOME/.fzf/shell/key-bindings.bash ] && . $HOME/.fzf/shell/key-bindings.bash
 which screenfetch &>/dev/null && screenfetch
 [ -x /usr/bin/nvim ] && export EDITOR=/usr/bin/nvim
+
+[ -x (which rg 2>/dev/null) ] && set -gx FZF_DEFAULT_COMMAND 'rg --files --no-ignore --hidden --follow --glob "!.git/*"'

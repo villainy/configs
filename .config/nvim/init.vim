@@ -145,6 +145,16 @@ endfunction
 " W also w's
 command W write
 
+function! ToggleMouse()
+    " check if mouse is enabled
+    if &mouse == 'a'
+        " disable mouse
+        set mouse=
+    else
+        " enable mouse everywhere
+        set mouse=a
+    endif
+endfunc
 " }}}
 
 " Misc keymaps {{{
@@ -181,6 +191,8 @@ nnoremap <silent> <leader>nr :set rnu!<CR>
 " Grep word under cursor
 nnoremap gr :grep <cword><CR>
 
+" Toggle mouse
+nnoremap <silent> <leader>m :call ToggleMouse()<CR>
 " }}}
 
 " Filetypes {{{
@@ -415,7 +427,11 @@ nmap <silent> <C-x> :NERDTreeToggle<CR>
 " "}}}
 
 " fzf {{{
-let $FZF_DEFAULT_COMMAND = 'find . -not -wholename "*.git/*"'
+if executable("rg")
+    let $FZF_DEFAULT_COMMAND = 'find . -not -wholename "*.git/*"'
+else
+    let $FZF_DEFAULT_COMMAND = 'find . -not -wholename "*.git/*"'
+endif
 let g:fzf_layout = { 'up': '~30%' }
 nmap ,ff :Files<CR>
 nmap ,fh :Files $HOME<CR>
@@ -425,6 +441,16 @@ nmap ,fc :Commits<CR>
 nmap ,fs :Snippets<CR>
 nmap ,ft :BTags<CR>
 nmap ,fT :Tags<CR>
+
+let g:fzf_action = {
+    \ 'ctrl-q': 'bdelete',
+    \ 'ctrl-t': 'tab split',
+    \ 'ctrl-x': 'split',
+    \ 'ctrl-v': 'vsplit' }
+
+command! FZFMulti call fzf#run(fzf#wrap({
+            \'options': ['--multi'],
+            \}))
 " }}}
 
 " java-api-complete {{{
