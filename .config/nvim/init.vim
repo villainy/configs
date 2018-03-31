@@ -32,6 +32,12 @@ if has("vim_starting")
   set encoding=utf-8
 endif
 
+" Use ripgrep
+if executable("rg")
+    set grepprg=rg\ --vimgrep\ --no-heading
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
+
 set scrolljump=5 " lines to scroll when cursor leaves screen
 set scrolloff=3  " minimum lines to keep above and below cursor
 set autoindent
@@ -171,6 +177,10 @@ inoremap <C-c> <C-x><C-o>
 " Toggle line numbers/relative numbers
 nnoremap <silent> <leader>nn :set nu!<CR>
 nnoremap <silent> <leader>nr :set rnu!<CR>
+
+" Grep word under cursor
+nnoremap gr :grep <cword><CR>
+
 " }}}
 
 " Filetypes {{{
@@ -373,10 +383,13 @@ nmap ga <Plug>(EasyAlign)
 " vim-fugitive {{{
 nmap <silent> <Leader>gs :Gstatus<CR>
 nmap <silent> <Leader>gc :Gcommit<CR>
+nmap <silent> <Leader>gb :Gblame<CR>
 " }}}
 
 " vim-gitgutter {{{
-let g:gitgutter_enabled = 0
+let g:gitgutter_enabled = 1
+set updatetime=250
+set signcolumn=yes
 nmap <silent> <Leader>gg :GitGutterToggle<CR>
 nmap <silent> <Leader>gn :GitGutterNextHunk<CR>
 nmap <silent> <Leader>gp :GitGutterPrevHunk<CR>
