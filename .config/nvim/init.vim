@@ -25,6 +25,12 @@ if has("vim_starting")
   set encoding=utf-8
 endif
 
+" Use ripgrep
+if executable("rg")
+    set grepprg=rg\ --vimgrep\ --no-heading
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
+
 set scrolljump=5 " lines to scroll when cursor leaves screen
 set scrolloff=3  " minimum lines to keep above and below cursor
 set autoindent
@@ -135,6 +141,16 @@ if has("vim_starting")
     command W write
 endif
 
+function! ToggleMouse()
+    " check if mouse is enabled
+    if &mouse == 'a'
+        " disable mouse
+        set mouse=
+    else
+        " enable mouse everywhere
+        set mouse=a
+    endif
+endfunc
 " }}}
 
 " Misc keymaps {{{
@@ -167,6 +183,12 @@ inoremap <C-c> <C-x><C-o>
 " Toggle line numbers/relative numbers
 nnoremap <silent> <leader>nn :set nu!<CR>
 nnoremap <silent> <leader>nr :set rnu!<CR>
+
+" Grep word under cursor
+nnoremap gr :grep <cword><CR>
+
+" Toggle mouse
+nnoremap <silent> <leader>m :call ToggleMouse()<CR>
 " }}}
 
 " Filetypes {{{
@@ -238,7 +260,8 @@ Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " The ultimate snippet solut
 " TagBar seems to be crashing neovim even after this issue...
 " https://github.com/neovim/neovim/issues/5817
 Plug 'majutsushi/tagbar'                            " Vim plugin that displays tags in a window, ordered by scope
-Plug 'vim-php/tagbar-phpctags.vim'                  " Using phpctags to generate php ctags index for vim plugin tagbar.
+Plug 'vim-php/tagbar-phpctags.vim',
+            \ { 'do': 'make' }                      " Using phpctags to generate php ctags index for vim plugin tagbar.
 Plug 'yssl/QFEnter'                                 " Open a Quickfix item in a window you choose
 Plug 'neomake/neomake'                              " A plugin for asynchronous :make using Neovim's job-control functionality
 Plug 'villainy/vim-go', { 'for' : 'go' }            " My fork of faith/vim-go that actually works...
@@ -252,6 +275,7 @@ Plug 'chazy/cscope_maps'                            " cscope keyboard mappings f
 "Plug 'tpope/vim-sleuth'                             " Heuristically set buffer options
 Plug 'davidhalter/jedi'                             " Awesome autocompletion and static analysis library for python.
 Plug 'kshenoy/vim-signature'                        " Plugin to toggle, display and navigate marks
+Plug 'tpope/vim-abolish'                            " Working with variants of a word
 
 " Padawan is nice but doesn't seem to handle completion for builtins
 "if filereadable($HOME."/.composer/vendor/bin/padawan-server")
@@ -367,10 +391,13 @@ nmap ga <Plug>(EasyAlign)
 " vim-fugitive {{{
 nmap <silent> <Leader>gs :Gstatus<CR>
 nmap <silent> <Leader>gc :Gcommit<CR>
+nmap <silent> <Leader>gb :Gblame<CR>
 " }}}
 
 " vim-gitgutter {{{
-let g:gitgutter_enabled = 0
+let g:gitgutter_enabled = 1
+set updatetime=250
+set signcolumn=yes
 nmap <silent> <Leader>gg :GitGutterToggle<CR>
 nmap <silent> <Leader>gn :GitGutterNextHunk<CR>
 nmap <silent> <Leader>gp :GitGutterPrevHunk<CR>
@@ -396,7 +423,11 @@ nmap <silent> <C-x> :NERDTreeToggle<CR>
 " "}}}
 
 " fzf {{{
-let $FZF_DEFAULT_COMMAND = 'find . -not -wholename "*.git/*"'
+if executable("rg")
+    let $FZF_DEFAULT_COMMAND = 'find . -not -wholename "*.git/*"'
+else
+    let $FZF_DEFAULT_COMMAND = 'find . -not -wholename "*.git/*"'
+endif
 let g:fzf_layout = { 'up': '~30%' }
 nmap ,ff :Files<CR>
 nmap ,fh :Files $HOME<CR>
@@ -406,6 +437,16 @@ nmap ,fc :Commits<CR>
 nmap ,fs :Snippets<CR>
 nmap ,ft :BTags<CR>
 nmap ,fT :Tags<CR>
+
+let g:fzf_action = {
+    \ 'ctrl-q': 'bdelete',
+    \ 'ctrl-t': 'tab split',
+    \ 'ctrl-x': 'split',
+    \ 'ctrl-v': 'vsplit' }
+
+command! FZFMulti call fzf#run(fzf#wrap({
+            \'options': ['--multi'],
+            \}))
 " }}}
 
 " java-api-complete {{{
@@ -508,6 +549,11 @@ let g:deoplete#omni_patterns = {}
 "Dart
 let g:deoplete#sources#dart#dart_sdk_path = '/opt/dart/dart-sdk'
 let g:deoplete#sources#dart#dart_analysis_server_flags = '--enable-instrumentation --instrumentation-log-file /tmp/dart_analysis.log --port 15151'
+
+"Python
+let g:deoplete#sources#jedi#extra_path = [
+    \ '/usr/lib/python2.7/site-packages/',
+    \ '/home/mmorgan/.local/lib/python2.7/site-packages/' ]
 
 " }}}
 
