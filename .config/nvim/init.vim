@@ -20,13 +20,6 @@ autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 let python_higlight_all=1
 
-" Don't enable mouse if we're running in screen/tmux
-if $TERM =~# '^screen'
-  set mouse=
-else
-  set mouse=a
-endif
-
 " Set encoding when vim first starts
 if has("vim_starting")
   set encoding=utf-8
@@ -51,6 +44,7 @@ set laststatus=2
 set listchars=tab:\|\ 
 set splitright
 set noshowmode
+set mouse=a
 " }}}
 
 " Misc functions {{{
@@ -137,7 +131,9 @@ function! PepFmt()
 endfunction
 
 " W also w's
-command W write
+if has("vim_starting")
+    command W write
+endif
 
 " }}}
 
@@ -231,7 +227,7 @@ Plug 'scrooloose/nerdcommenter'                     " Vim plugin for intensely o
 Plug 'junegunn/vim-easy-align'                      " A Vim alignment plugin
 Plug 'tpope/vim-unimpaired'                         " unimpaired.vim: pairs of handy bracket
 Plug 'embear/vim-foldsearch'                        " fold away lines that don't match a specific search pattern
-Plug 'Rename'                                       " Rename a buffer within Vim and on disk
+Plug 'vim-scripts/Rename'                                       " Rename a buffer within Vim and on disk
 Plug 'ethanmuller/scratch.vim'                      " Plugin to create and use a scratch Vim buffer
 Plug 'sjl/gundo.vim'                                " Gundo.vim is Vim plugin to visualize your Vim undo tree.
 Plug 'othree/eregex.vim'                            " Perl/Ruby style regexp notation for Vim
@@ -277,7 +273,7 @@ Plug 'Shougo/deoplete.nvim'                            " Dark powered asynchrono
 Plug 'Shougo/neco-vim', { 'for' : 'vim' }              " The vim source for neocomplete/deoplete
 Plug 'zchee/deoplete-go', { 'for' : 'go' }             " deoplete.nvim source for Go
 Plug 'zchee/deoplete-jedi', { 'for' : 'python' }       " deoplete.nvim source for Python
-Plug '~/src/mmorgan/deoplete-dart', { 'for' : 'dart' } " deoplete.nvim source for Dart (in-progress)
+"Plug '~/src/mmorgan/deoplete-dart', { 'for' : 'dart' } " deoplete.nvim source for Dart (in-progress)
 
 " Syntax highlighting
 Plug 'elzr/vim-json', { 'for' : 'json' }
@@ -286,7 +282,7 @@ Plug 'StanAngeloff/php.vim', { 'for' : 'php' }
 Plug 'pangloss/vim-javascript', { 'for' : 'javascript' }
 Plug 'mxw/vim-jsx', { 'for' : 'javascript' } 
 Plug 'dart-lang/dart-vim-plugin', { 'for' : 'dart' }
-Plug 'hdima/python-syntax', { 'for' : 'python' }
+Plug 'vim-python/python-syntax', { 'for' : 'python' }
 Plug 'sheerun/vim-polyglot' " A solid language pack for Vim.
 Plug 'pearofducks/ansible-vim'
 Plug 'ekalinin/Dockerfile.vim'
@@ -443,8 +439,10 @@ let g:UltiSnipsJumpBackwardTrigger="<S-tab>"
 let g:UltiSnipsExpandTrigger="<nop>"
 let g:ulti_expand_or_jump_res = 0
 "Local snippet vars
-let g:snips_author = 'Michael Morgan <mmorgan@sevone.com>'
-let g:snips_copyright = 'SevOne Inc.'
+let g:snips_author = 'Michael Morgan'
+let g:snips_email = 'mmorgan@morgan83.com'
+let g:snips_copyright = 'Michael Morgan'
+let g:snips_github = 'https://github.com/villainy'
 "Allow enter key to use a snippet
 function! <SID>ExpandSnippetOrReturn()
     let snippet = UltiSnips#ExpandSnippetOrJump()

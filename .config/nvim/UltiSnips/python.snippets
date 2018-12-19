@@ -1,0 +1,76 @@
+priority 100
+
+global !p
+
+NORMAL  = 0x1
+DOXYGEN = 0x2
+SPHINX  = 0x3
+GOOGLE  = 0x4
+NUMPY   = 0x5
+JEDI    = 0x6
+
+SINGLE_QUOTES = "'"
+DOUBLE_QUOTES = '"'
+
+def get_style(snip):
+	style = snip.opt("g:ultisnips_python_style", "normal")
+
+	if    style == "doxygen": return DOXYGEN
+	elif  style == "sphinx": return SPHINX
+	elif  style == "google": return GOOGLE
+	elif  style == "numpy": return NUMPY
+	elif  style == "jedi": return JEDI
+	else: return NORMAL
+
+def get_quoting_style(snip):
+	style = snip.opt("g:ultisnips_python_quoting_style", "double")
+	if style == 'single':
+		return SINGLE_QUOTES
+	return DOUBLE_QUOTES
+
+def triple_quotes(snip):
+	style = snip.opt("g:ultisnips_python_triple_quoting_style")
+	if not style:
+		return get_quoting_style(snip) * 3
+	return (SINGLE_QUOTES if style == 'single' else DOUBLE_QUOTES) * 3
+
+def format_return(style):
+	if style == DOXYGEN:
+		return "@return: TODO"
+	elif style in (NORMAL, SPHINX, JEDI):
+		return ":returns: TODO"
+	elif style == GOOGLE:
+		return "Returns: TODO"
+
+endglobal
+
+snippet breakpoint
+import pdb; pdb.set_trace()
+endsnippet
+
+snippet rwprop "Read write property" b
+@property
+def ${1:name}(self) -> ${2:type}:
+	`!p snip.rv = triple_quotes(snip) if t[3] else ''
+`${3:TODO: Docstring for $1.}`!p
+if t[3]:
+	snip >> 1
+
+	style = get_style(snip)
+	snip.rv += '\n' + snip.mkline('', indent='')
+	snip += format_return(style)
+	snip.rv += '\n' + snip.mkline('', indent='')
+	snip += triple_quotes(snip)
+else:
+	snip.rv = ""`
+	${4:return self._$1}
+
+@$1.setter
+def $1(self, $1: $2) -> None:
+	if not isinstance($1, $2):
+		raise ValueError('$1 must be $2')
+
+	self._$1 = $1$0
+endsnippet
+
+# vim:ft=snippets:
