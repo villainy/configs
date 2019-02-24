@@ -39,7 +39,7 @@ function parse_git_branch() {
 	if [ ! "${BRANCH}" == "" ]
 	then
 		STAT=`parse_git_dirty`
-		echo -e "${BRANCH}${STAT} "
+		echo -e " ${BRANCH}${STAT}"
 	else
 		echo ""
 	fi
@@ -111,7 +111,7 @@ function short_pwd {
         shortpwd="${shortpwd}/\[${color_yellow}\]${lastpart}\[${color_default}\]"
     fi
 
-    echo -e $shortpwd
+    echo -e " $shortpwd"
 }
 
 #function timer_start {
@@ -130,7 +130,7 @@ function short_pwd {
 #trap 'timer_start' DEBUG
 
 function right_prompt {
-    exit_code=$?
+    exit_code=" $?"
     if [ $exit_code -eq 0 ];then
         unset exit_code
     fi
@@ -138,17 +138,17 @@ function right_prompt {
     pad=${COLUMNS}
     git=$(parse_git_branch)
     virtualenv=
-    [ ! -z $VIRTUAL_ENV ] && virtualenv="py:"$(basename $VIRTUAL_ENV)" "
+    [ ! -z $VIRTUAL_ENV ] && virtualenv=" py: "$(basename $VIRTUAL_ENV)
     
     
-    pad=$(( $pad - $(echo -n "${git} ${exit_code}"|wc -c) ))
+    pad=$(( $pad - $(echo -n "${git}${virtualenv}${exit_code}"|wc -c) ))
 
     printf "%${pad}s${git}${virtualenv}${color_red}${exit_code}${color_default}\r"
 }
 
 function bash_prompt {
     right_prompt
-    PS1="\[${color_green}\]\u\[${color_default}\]"
+    PS1="\[${color_green}\]\u\[${color_default}\] "
     if [ ! -z "$SSH_CLIENT" ];then
         PS1="${PS1}\[${color_cyan}\]@\h \[${color_default}\]"
     fi
@@ -156,6 +156,33 @@ function bash_prompt {
     PS1="${PS1}$(short_pwd)\[${color_default}\] \$ "
 }
 
-PROMPT_COMMAND="bash_prompt"
+function bash_prompt_2line {
+    exit_code=$?
+    if [ $exit_code -eq 0 ];then
+        unset exit_code
+    else
+        exit_code=" $exit_code"
+    fi
+
+    PS1="\[${color_green}\]\u\[${color_default}\]"
+    if [ ! -z "$SSH_CLIENT" ];then
+        PS1="${PS1}\[${color_cyan}\]@\h \[${color_default}\]"
+    fi
+
+    git=$(parse_git_branch)
+    PS1="${PS1}${git}"
+
+    virtualenv= [ ! -z $VIRTUAL_ENV ] && virtualenv=" py: "$(basename $VIRTUAL_ENV)
+    PS1="${PS1}${virtualenv}"
+
+    PS1="${PS1}${exit_code}"
+
+    pwd=$(short_pwd)
+    PS1="${PS1}${pwd}"
+
+    PS1="${PS1}\n\[${color_default}\]\$ "
+}
+
+PROMPT_COMMAND="bash_prompt_2line"
 
 # vim: ft=sh
