@@ -11,8 +11,6 @@ fi
 # User specific aliases and functions
 
 alias vim=nvim
-alias docker='sudo docker'
-alias docker-compose='sudo docker-compose'
 alias dfimage="docker run -v /var/run/docker.sock:/var/run/docker.sock --rm mmorgan/dockerfile-from-image"
 
 if [[ $- =~ "i" ]];then 

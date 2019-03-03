@@ -95,7 +95,7 @@ endfunction
 function! SetProjectRoot()
     " default to the current file's directory
     let directory = expand('%:p:h')
-    if isdirectory(directory) && !&previewwindow
+    if isdirectory(directory) && !&previewwindow && &filetype != 'gitcommit'
         lcd %:p:h
         let git_dir = system("git rev-parse --show-toplevel")
         " See if the command output starts with 'fatal' (if it does, not in a git repo)
