@@ -7,10 +7,11 @@ fi
 
 # User specific environment and startup programs
 
-PATH=$PATH:$HOME/.local/bin:$HOME/bin:$HOME/.fzf/bin
+PATH=$PATH:$HOME/.local/bin:$HOME/.pyenv/bin:$HOME/bin:$HOME/.fzf/bin:$HOME/.go/bin
 BASE16_SHELL_SET_BACKGROUND=false
+#FZF_TMUX=1
 
-export PATH BASE16_SHELL_SET_BACKGROUND
+export PATH BASE16_SHELL_SET_BACKGROUND FZF_TMUX
 
 [ -e $HOME/.fzf/shell/key-bindings.bash ] && . $HOME/.fzf/shell/key-bindings.bash
 which screenfetch &>/dev/null && screenfetch
