@@ -34,7 +34,6 @@ set signcolumn=yes
 set smartcase
 set smarttab
 set softtabstop=4
-set splitbelow
 set splitright
 set tabstop=4
 set termguicolors " Use GUI colors for the terminal. Enable this when TrueColor is working
