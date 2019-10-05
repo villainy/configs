@@ -232,10 +232,11 @@ nmap ,ff :Files<CR>
 nmap ,fh :Files $HOME<CR>
 nmap ,fb :Buffers<CR>
 nmap ,fr :Files /<CR>
-nmap ,fc :Commits<CR>
 nmap ,fs :Snippets<CR>
 nmap ,ft :BTags<CR>
 nmap ,fT :Tags<CR>
+nmap <silent> <leader>gC :Commits<CR>
+nmap <silent> <leader>gB :Commits<CR>
 " }}}
 " }}}
 
