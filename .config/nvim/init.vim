@@ -1,3 +1,5 @@
+let g:project_root='/home/mmorgan/src'
+
 " Settings {{{
 " Set encoding when vim first starts
 if has("vim_starting")
@@ -175,7 +177,11 @@ vnoremap // y/<C-R>"<CR>"
 nnoremap <silent> <leader>tc :call g:ToggleColorColumn()<CR>
 
 " Grep word under cursor
-nnoremap gr :grep <cword><CR>
+if executable('rg')
+    nnoremap gr :exec("Rg ".expand("<cword>"))<CR>
+else
+    nnoremap gr :grep <cword><CR>
+endif
 
 " Toggle mouse
 nnoremap <silent> <leader>m :call ToggleMouse()<CR>
@@ -283,37 +289,39 @@ Plug 'sjl/gundo.vim'                                 " Gundo.vim is Vim plugin t
 Plug 'othree/eregex.vim'                             " Perl/Ruby style regexp notation for Vim
 Plug 'milkypostman/vim-togglelist'                   " Functions to toggle the [Location List] and the [Quickfix List] windows.
 Plug 'tpope/vim-fugitive'                            " fugitive.vim: a Git wrapper so awesome, it should be illegal
-Plug 'airblade/vim-gitgutter'                        " A Vim plugin which shows a git diff in the gutter (sign column) and stages/undoes hunks.
+Plug 'airblade/vim-gitgutter'                        " A Vim plugin which shows a git diff in the gutter (sign column)
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'  " The ultimate snippet solution for Vim.
 Plug 'majutsushi/tagbar'                             " Vim plugin that displays tags in a window, ordered by scope
 Plug 'yssl/QFEnter'                                  " Open a Quickfix item in a window you choose
-Plug 'neomake/neomake'                               " A plugin for asynchronous :make using Neovim's job-control functionality
 Plug 'Raimondi/delimitMate'                          " insert mode auto-completion for quotes, parens, brackets, etc.
 Plug 'ludovicchabant/vim-gutentags'                  " A Vim plugin that manages your tag files
 Plug 'junegunn/fzf', {
             \ 'dir': '~/.fzf',
             \ 'do': './install --bin'
             \ } | Plug 'villainy/fzf.vim'            " A command-line fuzzy finder written in Go
-Plug 'davidhalter/jedi', { 'for' : 'python'}         " Awesome autocompletion and static analysis library for python.
 Plug 'kshenoy/vim-signature'                         " Plugin to toggle, display and navigate marks
 Plug 'tpope/vim-abolish'                             " Working with variants of a word
-
-Plug 'shawncplus/phpcomplete.vim', { 'for' : 'php' } " Improved PHP omnicompletion
-
-                                                     " deoplete and sources
-Plug 'Shougo/deoplete.nvim'                          " Dark powered asynchronous completion framework for neovim
-Plug 'Shougo/neco-vim', { 'for' : 'vim' }            " The vim source for neocomplete/deoplete
-Plug 'zchee/deoplete-jedi', { 'for' : 'python' }     " deoplete.nvim source for Python
-
                                                      " Syntax highlighting
+Plug 'sheerun/vim-polyglot'                          " A solid language pack for Vim.
 Plug 'elzr/vim-json', { 'for' : 'json' }
 Plug 'StanAngeloff/php.vim', { 'for' : 'php' }
 Plug 'pangloss/vim-javascript', { 'for' : 'javascript' }
 Plug 'mxw/vim-jsx', { 'for' : 'javascript' } 
-Plug 'sheerun/vim-polyglot'                          " A solid language pack for Vim.
-Plug 'pearofducks/ansible-vim'
-Plug 'ekalinin/Dockerfile.vim'
+Plug 'pearofducks/ansible-vim', { 'for' : 'ansible' }
+Plug 'ekalinin/Dockerfile.vim', { 'for': [ 
+            \ 'Dockerfile',
+            \ 'yaml.docker-compose'
+            \ ] }
 Plug 'freitass/todo.txt-vim', { 'for': 'todo' }
+
+Plug 'neomake/neomake'                               " A plugin for asynchronous :make using Neovim's job-control functionality
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
+
+Plug 'Shougo/deoplete.nvim'                          " Dark powered asynchronous completion framework for neovim
+Plug 'Shougo/neco-vim', { 'for' : 'vim' }            " The vim source for neocomplete/deoplete
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
 
 call plug#end()
 " }}}
@@ -353,7 +361,7 @@ let g:eregex_default_enable = 0
 
 " fzf {{{
 if executable("rg")
-    let $FZF_DEFAULT_COMMAND = 'rg --files'
+    let $FZF_DEFAULT_COMMAND = 'rg --files --no-ignore --hidden --follow --glob "!.git/*"'
 else
     let $FZF_DEFAULT_COMMAND = 'find . -not -wholename "*.git/*"'
 endif
@@ -404,16 +412,53 @@ let g:gutentags_ctags_exclude = [ 'node_modules' ]
 "call deoplete#enable_logging('DEBUG', '/home/mmorgan/tmp/deoplete.log')
 
 let g:deoplete#enable_at_startup = 1
-"let g:deoplete#omni_patterns = {}
+let g:deoplete#omni_patterns = {}
+"
+" Disable for LSP languages
+au FileType php
+\ call deoplete#custom#buffer_option('auto_complete', v:false)
+au FileType python
+\ call deoplete#custom#buffer_option('auto_complete', v:false)
 " }}}
 
 " neomake {{{
 call neomake#configure#automake('nrw', 1000)
+"
+" Disable for LSP languages
+let g:neomake_php_enabled_makers = []
+let g:neomake_python_enabled_makers = []
 " }}}
 
 " phpcomplete-extended {{{
 "let g:phpcomplete_index_composer_command = '/usr/bin/composer'
 " }}}
+
+" vim-lsp {{{
+"let g:lsp_log_verbose = 1
+let g:lsp_log_file = expand('~/.config/nvim/vim-lsp.log')
+let g:asyncomplete_log_file = expand('~/.config/nvim/asyncomplete.log')
+
+let g:lsp_signs_enabled = 1
+
+au User lsp_setup call lsp#register_server({
+            \ 'name': 'pyls',
+            \ 'cmd': {server_info->[&shell, &shellcmdflag, 'nc localhost 8000']},
+            \ 'whitelist': ['python'],
+            \ 'root_uri': {server_info->lsp#utils#path_to_uri(
+            \ substitute(lsp#utils#find_nearest_parent_file_directory(
+            \ lsp#utils#get_buffer_path(),
+            \ ['.git/','setup.py']), '^'.g:project_root, '/src', ''))}})
+
+au User lsp_setup call lsp#register_server({
+            \ 'name': 'phpls',
+            \ 'cmd': {server_info->[&shell, &shellcmdflag, 'nc localhost 2088']},
+            \ 'whitelist': ['php'],
+            \ 'root_uri': {server_info->lsp#utils#path_to_uri(
+            \ substitute(lsp#utils#find_nearest_parent_file_directory(
+            \ lsp#utils#get_buffer_path(),
+            \ ['.git/','composer.json']), '^'.g:project_root, '/src', '',))}})
+" }}}
+
 " }}}
 
 " Custom highlighting {{{
