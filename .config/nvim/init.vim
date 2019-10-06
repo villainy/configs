@@ -171,11 +171,15 @@ function! LightLineFugitive() " {{{ Git branch 
 endfunction " }}}
 
 function! LightLineFiletype() " {{{
-    return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
+    if exists("*WebDevIconsGetFileTypeSymbol")
+        return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
+    endif
 endfunction " }}}
 
 function! LightLineFileformat() " {{{
-    return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
+    if exists("*WebDevIconsGetFileTypeSymbol")
+        return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
+    endif
 endfunction " }}}
 " }}}
 
