@@ -470,8 +470,8 @@ let g:neomake_python_enabled_makers = []
 
 " vim-lsp {{{
 "let g:lsp_log_verbose = 1
-let g:lsp_log_file = expand('~/.config/nvim/vim-lsp.log')
-let g:asyncomplete_log_file = expand('~/.config/nvim/asyncomplete.log')
+"let g:lsp_log_file = expand('~/.config/nvim/vim-lsp.log')
+"let g:asyncomplete_log_file = expand('~/.config/nvim/asyncomplete.log')
 
 let g:lsp_signs_enabled = 1
 
