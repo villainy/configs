@@ -13,6 +13,7 @@ if executable("rg")
 endif
 
 set autoindent
+set completeopt=menuone,noinsert,noselect,preview
 set cursorline
 set expandtab
 set fillchars+=stl:\ ,stlnc:\
@@ -311,6 +312,8 @@ Plug 'milkypostman/vim-togglelist'                   " Functions to toggle the [
 Plug 'tpope/vim-fugitive'                            " fugitive.vim: a Git wrapper so awesome, it should be illegal
 Plug 'airblade/vim-gitgutter'                        " A Vim plugin which shows a git diff in the gutter (sign column)
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'  " The ultimate snippet solution for Vim.
+Plug 'thomasfaingnaert/vim-lsp-snippets'
+Plug 'thomasfaingnaert/vim-lsp-ultisnips'
 Plug 'villainy/vista.vim', { 'branch': 'nearest-class' }
 Plug 'yssl/QFEnter'                                  " Open a Quickfix item in a window you choose
 Plug 'Raimondi/delimitMate'                          " insert mode auto-completion for quotes, parens, brackets, etc.
@@ -384,7 +387,7 @@ let g:eregex_default_enable = 0
 
 " fzf {{{
 if executable("rg")
-    let $FZF_DEFAULT_COMMAND = 'rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+    let $FZF_DEFAULT_COMMAND = 'rg --files --no-ignore --hidden --follow --glob "!.git/*" --glob "!tags"'
 else
     let $FZF_DEFAULT_COMMAND = 'find . -not -wholename "*.git/*"'
 endif
