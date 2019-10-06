@@ -428,6 +428,8 @@ Plug 'prabirshrestha/asyncomplete.vim', { 'for' : ['php', 'python'] }
 Plug 'prabirshrestha/asyncomplete-lsp.vim', { 'for' : ['php', 'python'] }
 Plug 'ryanoasis/vim-devicons'
 
+Plug 'vim-vdebug/vdebug'
+
 call plug#end()
 " }}}
 
