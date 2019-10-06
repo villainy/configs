@@ -1,4 +1,18 @@
+" Environment Settings {{{
 let g:project_root='/home/mmorgan/src'
+let g:netcat_bin = 'D:\Programs\Nmap\ncat'
+
+if has("win32")
+    let g:project_root='D:\\Users\\Michael\\Projects'
+    let g:python_host_prog = 'C:\Users\Michael\AppData\Local\Programs\Python\Python27\python.exe'
+    let g:python3_host_prog = 'C:\Users\Michael\AppData\Local\Programs\Python\Python37-32\python.exe'
+endif
+
+let g:snips_author = 'Michael Morgan'
+let g:snips_email = 'mmorgan@morgan83.com'
+let g:snips_copyright = 'Michael Morgan'
+let g:snips_github = 'https://github.com/villainy'
+" }}}
 
 " Settings {{{
 " Set encoding when vim first starts
@@ -19,6 +33,7 @@ set expandtab
 set fillchars+=stl:\ ,stlnc:\
 set foldlevel=99
 set foldmethod=indent
+set guifont="SauceCodePro NF Regular:h14"
 set hidden
 set ignorecase
 set incsearch
@@ -41,6 +56,16 @@ set splitright
 set tabstop=4
 set termguicolors " Use GUI colors for the terminal. Enable this when TrueColor is working
 set updatetime=250
+
+if has("win32")
+    behave mswin
+
+    "set shell=powershell shellquote=( shellpipe=\| shellxquote=
+    "set shellcmdflag=-NoLogo\ -NoProfile\ -ExecutionPolicy\ RemoteSigned\ -Command
+    "set shellredir=\|\ Out-File\ -Encoding\ UTF8
+    set fileformat=unix
+    set fileformats=unix,dos
+endif
 " }}}
 
 " Commands/Functions {{{
@@ -144,6 +169,14 @@ function! LightLineFugitive() " {{{ Git branch 
     endif
     return ''
 endfunction " }}}
+
+function! LightLineFiletype() " {{{
+    return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
+endfunction " }}}
+
+function! LightLineFileformat() " {{{
+    return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
+endfunction " }}}
 " }}}
 
 " UltiSnips {{{
@@ -176,6 +209,18 @@ function! VistaSourcePath() abort
     return source_path
 endfunction
 " }}}
+
+" vim-lsp {{{
+function! LspMapRoot()
+    if exists("*lsp#utils#path_to_uri")
+        return lsp#utils#path_to_uri(
+                \ substitute(lsp#utils#find_nearest_parent_file_directory(
+                \ lsp#utils#get_buffer_path(),
+                \ ['.git/','setup.py', 'composer.json']), '^'.g:project_root, '/src', ''))
+    endif
+endfunction
+" }}}
+
 " }}}
 
 " Keymaps {{{
@@ -214,6 +259,32 @@ cmap w!! w !sudo tee > /dev/null %
 imap <expr> <CR> pumvisible() ? "<C-R>=<SID>ExpandSnippetOrReturn()<CR>" : "<Plug>delimitMateCR"
 
 nnoremap <silent> <C-t> :Vista!!<CR>
+
+" GUI {{{
+if has("clipboard")
+    " CTRL-X and SHIFT-Del are Cut
+    vnoremap <C-X> "+x
+    vnoremap <S-Del> "+x
+
+    " CTRL-C and CTRL-Insert are Copy
+    vnoremap <C-C> "+y
+    vnoremap <C-Insert> "+y
+
+    " CTRL-V and SHIFT-Insert are Paste
+    "map <C-V>		"+gP
+    map <S-Insert>		"+gP
+
+    "cmap <C-V>		<C-R>+
+    cmap <S-Insert>		<C-R>+
+endif
+
+if exists('g:fvim_loaded')
+    " Ctrl-ScrollWheel for zooming in/out
+    nnoremap <silent> <C-ScrollWheelUp> :set guifont=+<CR>
+    nnoremap <silent> <C-ScrollWheelDown> :set guifont=-<CR>
+    nnoremap <A-CR> :FVimToggleFullScreen<CR>
+endif
+" }}}
 
 " GitGutter {{{
 nmap <silent> <Leader>gg :GitGutterToggle<CR>
@@ -277,8 +348,6 @@ autocmd BufEnter *.nse setf lua
 autocmd BufEnter *.cron setf crontab
 autocmd BufEnter *.md setf markdown
 
-autocmd FileType php setlocal omnifunc=phpcomplete#CompletePHP
-"
 " follow symlink and set working directory
 autocmd BufEnter *
             \ call FollowSymlink() |
@@ -289,6 +358,11 @@ autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 " Load local configs
 autocmd BufReadPre * call LoadLocalConfig()
+
+" vim-lsp isn't starting correctly on enabled filetypes
+if has("win32")
+    autocmd FileType php,python if exists("g:lsp_loaded") && g:lsp_loaded | call lsp#enable() | endif
+endif
 "}}}
 
 " Plugins {{{
@@ -300,6 +374,7 @@ Plug 'guns/xterm-color-table.vim',
             \ { 'on': 'XtermColorTable'}             " All 256 xterm colors with their RGB equivalents, right in Vim!
 Plug 'itchyny/lightline.vim'                         " Syntax highlighting for hackers
 Plug 'scrooloose/nerdtree'                           " A tree explorer plugin for vim.
+Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'scrooloose/nerdcommenter'                      " Vim plugin for intensely orgasmic commenting
 Plug 'junegunn/vim-easy-align'                       " A Vim alignment plugin
 Plug 'tpope/vim-unimpaired'                          " unimpaired.vim: pairs of handy bracket
@@ -347,6 +422,7 @@ Plug 'Shougo/deoplete.nvim'                          " Dark powered asynchronous
 Plug 'Shougo/neco-vim', { 'for' : 'vim' }            " The vim source for neocomplete/deoplete
 Plug 'prabirshrestha/asyncomplete.vim', { 'for' : ['php', 'python'] }
 Plug 'prabirshrestha/asyncomplete-lsp.vim', { 'for' : ['php', 'python'] }
+Plug 'ryanoasis/vim-devicons'
 
 call plug#end()
 " }}}
@@ -362,14 +438,35 @@ let g:lightline = {
             \               [ 'filename', 'model', 'class', 'source_path', 'modified' ] ]
             \ },
             \ 'component_function': {
-            \   'fugitive': 'LightLineFugitive',
-            \   'readonly': 'LightLineReadonly',
+            \   'filetype':    'LightLineFiletype',
+            \   'fileformat':  'LightLineFileformat',
+            \   'fugitive':    'LightLineFugitive',
+            \   'readonly':    'LightLineReadonly',
             \   'source_path': 'VistaSourcePath',
-            \   'modified': 'LightLineModified'
+            \   'modified':    'LightLineModified'
             \ },
             \ 'separator': { 'left': '', 'right': '' },
             \ 'subseparator': { 'left': '', 'right': '' }
             \ }
+" }}}
+
+" NERDTree {{{
+let NERDTreeMinimalUI=1
+let NERDTreeDirArrowExpandable='▸'
+let NERDTreeDirArrowCollapsible='▾'
+
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "",
+    \ "Staged"    : "",
+    \ "Untracked" : "",
+    \ "Renamed"   : "",
+    \ "Unmerged"  : "",
+    \ "Deleted"   : "",
+    \ "Dirty"     : "",
+    \ "Clean"     : "",
+    \ 'Ignored'   : "",
+    \ "Unknown"   : ""
+    \ }
 " }}}
 
 " base16 {{{
@@ -406,11 +503,6 @@ command! FZFMulti call fzf#run(fzf#wrap({
 " }}}
 
 " UltiSnips {{{
-let g:snips_author = 'Michael Morgan'
-let g:snips_email = 'mmorgan@morgan83.com'
-let g:snips_copyright = 'Michael Morgan'
-let g:snips_github = 'https://github.com/villainy'
-
 let g:UltiSnipsEditSplit="vertical"          " vsplit when editing snippet file
 let g:UltiSnipsJumpForwardTrigger="<tab>"    " Map tab/shifttab for entering snippet popup instead of whatever the insane default was
 let g:UltiSnipsJumpBackwardTrigger="<S-tab>" " Integrate with YCM
@@ -469,29 +561,22 @@ let g:neomake_python_enabled_makers = []
 " }}}
 
 " vim-lsp {{{
+let g:lsp_signs_enabled = 1
 "let g:lsp_log_verbose = 1
 "let g:lsp_log_file = expand('~/.config/nvim/vim-lsp.log')
 "let g:asyncomplete_log_file = expand('~/.config/nvim/asyncomplete.log')
 
-let g:lsp_signs_enabled = 1
-
 au User lsp_setup call lsp#register_server({
             \ 'name': 'pyls',
-            \ 'cmd': {server_info->[&shell, &shellcmdflag, 'nc localhost 8000']},
+            \ 'cmd': {server_info->[&shell, &shellcmdflag, g:netcat_bin.' localhost 8000']},
             \ 'whitelist': ['python'],
-            \ 'root_uri': {server_info->lsp#utils#path_to_uri(
-            \ substitute(lsp#utils#find_nearest_parent_file_directory(
-            \ lsp#utils#get_buffer_path(),
-            \ ['.git/','setup.py']), '^'.g:project_root, '/src', ''))}})
+            \ 'root_uri': {server_info->LspMapRoot()}})
 
 au User lsp_setup call lsp#register_server({
             \ 'name': 'phpls',
-            \ 'cmd': {server_info->[&shell, &shellcmdflag, 'nc localhost 2088']},
+            \ 'cmd': {server_info->[&shell, &shellcmdflag, g:netcat_bin.' localhost 2088']},
             \ 'whitelist': ['php'],
-            \ 'root_uri': {server_info->lsp#utils#path_to_uri(
-            \ substitute(lsp#utils#find_nearest_parent_file_directory(
-            \ lsp#utils#get_buffer_path(),
-            \ ['.git/','composer.json']), '^'.g:project_root, '/src', '',))}})
+            \ 'root_uri': {server_info->LspMapRoot()}})
 " }}}
 
 " }}}
