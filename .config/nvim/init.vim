@@ -155,6 +155,26 @@ function! <SID>ExpandSnippetOrReturn() " {{{ Allow enter key to use a snippet
     endif
 endfunction " }}}
 " }}}
+
+" Vista {{{
+function! VistaSourcePath() abort
+    let source_path = ''
+
+	let class = get(b:, 'vista_nearest_class', '')
+    if !empty(class)
+        let source_path .= class
+    endif
+
+	let method = get(b:, 'vista_nearest_method', '')
+    if !empty(class) && !empty(method)
+        let source_path .= '\'.method
+    elseif !empty(method)
+        let source_path .= method
+    endif
+
+    return source_path
+endfunction
+" }}}
 " }}}
 
 " Keymaps {{{
@@ -192,7 +212,7 @@ cmap w!! w !sudo tee > /dev/null %
 " Enter key for snippets in popup
 imap <expr> <CR> pumvisible() ? "<C-R>=<SID>ExpandSnippetOrReturn()<CR>" : "<Plug>delimitMateCR"
 
-nnoremap <silent> <C-t> :TagbarToggle<CR>
+nnoremap <silent> <C-t> :Vista!!<CR>
 
 " GitGutter {{{
 nmap <silent> <Leader>gg :GitGutterToggle<CR>
@@ -291,14 +311,16 @@ Plug 'milkypostman/vim-togglelist'                   " Functions to toggle the [
 Plug 'tpope/vim-fugitive'                            " fugitive.vim: a Git wrapper so awesome, it should be illegal
 Plug 'airblade/vim-gitgutter'                        " A Vim plugin which shows a git diff in the gutter (sign column)
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'  " The ultimate snippet solution for Vim.
-Plug 'majutsushi/tagbar'                             " Vim plugin that displays tags in a window, ordered by scope
+Plug 'villainy/vista.vim', { 'branch': 'nearest-class' }
 Plug 'yssl/QFEnter'                                  " Open a Quickfix item in a window you choose
 Plug 'Raimondi/delimitMate'                          " insert mode auto-completion for quotes, parens, brackets, etc.
 Plug 'ludovicchabant/vim-gutentags'                  " A Vim plugin that manages your tag files
 Plug 'junegunn/fzf', {
             \ 'dir': '~/.fzf',
             \ 'do': './install --bin'
-            \ } | Plug 'villainy/fzf.vim'            " A command-line fuzzy finder written in Go
+            \ } | 
+            \ Plug 'villainy/fzf.vim', {
+            \ 'branch': 'respect-tags-command' }     " A command-line fuzzy finder written in Go
 Plug 'kshenoy/vim-signature'                         " Plugin to toggle, display and navigate marks
 Plug 'tpope/vim-abolish'                             " Working with variants of a word
                                                      " Syntax highlighting
@@ -316,12 +338,12 @@ Plug 'freitass/todo.txt-vim', { 'for': 'todo' }
 
 Plug 'neomake/neomake'                               " A plugin for asynchronous :make using Neovim's job-control functionality
 Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/vim-lsp', { 'for' : ['php', 'python'] }
 
 Plug 'Shougo/deoplete.nvim'                          " Dark powered asynchronous completion framework for neovim
 Plug 'Shougo/neco-vim', { 'for' : 'vim' }            " The vim source for neocomplete/deoplete
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'prabirshrestha/asyncomplete.vim', { 'for' : ['php', 'python'] }
+Plug 'prabirshrestha/asyncomplete-lsp.vim', { 'for' : ['php', 'python'] }
 
 call plug#end()
 " }}}
@@ -334,11 +356,12 @@ let g:lightline = {
             \ 'active': {
             \   'left': [ [ 'mode', 'paste' ],
             \               [ 'fugitive', 'readonly'],
-            \               [ 'filename', 'modified' ] ]
+            \               [ 'filename', 'model', 'class', 'source_path', 'modified' ] ]
             \ },
             \ 'component_function': {
             \   'fugitive': 'LightLineFugitive',
             \   'readonly': 'LightLineReadonly',
+            \   'source_path': 'VistaSourcePath',
             \   'modified': 'LightLineModified'
             \ },
             \ 'separator': { 'left': '', 'right': '' },
@@ -396,9 +419,18 @@ let g:ulti_expand_or_jump_res = 0            " Local snippet vars
 let g:toggle_list_copen_command="botright copen" " Force quickfix window location
 " }}}
 
-" Tagbar {{{
-let g:tagbar_sort = 0
-let g:tagbar_compact = 1
+" Vista {{{
+let g:vista#renderer#enable_icons = 1
+if exists('*nvim_open_win')
+    let g:vista_echo_cursor_strategy = "floating_win"
+endif
+
+let g:vista_executive_for = {
+            \ 'php': 'vim_lsp',
+            \ 'python': 'vim_lsp',
+            \ }
+
+let g:vista_fzf_preview = ['up:~30%']
 " }}}
 
 " gutentags {{{
