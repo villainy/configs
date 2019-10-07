@@ -222,6 +222,10 @@ endfunction
 " }}}
 
 " Keymaps {{{
+
+" Escape to leave terminal
+tnoremap <Esc> <C-\><C-n>
+
 " Toggle line wrapping
 nnoremap <silent> <leader>w :set wrap!<CR>
 
