@@ -1,9 +1,10 @@
 " Environment Settings {{{
 let g:project_root='/home/mmorgan/src'
-let g:netcat_bin = 'D:\Programs\Nmap\ncat'
+let g:netcat_bin = 'nc'
 
 if has("win32")
     let g:project_root='D:\\Users\\Michael\\Projects'
+    let g:netcat_bin = 'D:\Programs\Nmap\ncat'
     let g:python_host_prog = 'C:\Users\Michael\AppData\Local\Programs\Python\Python27\python.exe'
     let g:python3_host_prog = 'C:\Users\Michael\AppData\Local\Programs\Python\Python37-32\python.exe'
 endif
@@ -336,15 +337,15 @@ nmap <silent> <leader>gB :Commits<CR>
 
 " vdebug {{{
 let g:vdebug_keymap = {
-\    "run" : ",dr",
-\    "run_to_cursor" : ",dR",
-\    "step_over" : ",dl",
-\    "step_into" : ",dj",
-\    "step_out" : ",dk",
-\    "close" : ",dq",
-\    "detach" : ",dD",
-\    "set_breakpoint" : ",ds",
-\    "eval_visual" : ",de"
+\    "run" : "<Leader><Insert>",
+\    "run_to_cursor" : "<Down>",
+\    "step_over" : "<Up>",
+\    "step_into" : "<Left>",
+\    "step_out" : "<Right>",
+\    "close" : "<Leader><Delete>",
+\    "detach" : "<F7>",
+\    "set_breakpoint" : "<Leader><Home>",
+\    "eval_visual" : "<Leader><PageUp>"
 \}
 " }}}
 " }}}
@@ -358,6 +359,7 @@ autocmd BufEnter *.tdl setf xml
 autocmd BufEnter *.nse setf lua
 autocmd BufEnter *.cron setf crontab
 autocmd BufEnter *.md setf markdown
+autocmd BufEnter docker-compose.*.conf setf yaml.docker-compose
 
 " follow symlink and set working directory
 autocmd BufEnter *
