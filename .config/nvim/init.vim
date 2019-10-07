@@ -132,13 +132,6 @@ function! ToggleMouse() " {{{
     endif
 endfunc " }}}
 
-" Load local configs {{{
-function! LoadLocalConfig()
-  if filereadable(getcwd().'/.vimrc.local')
-    source getcwd().'/.vimrc.local'
-  endif
-endfunction " }}}
-
 " Lightline Functions {{{
 function! LightLineModified() " {{{ Modified flag +
     if &filetype == "help"
@@ -340,6 +333,20 @@ nmap ,fT :Tags<CR>
 nmap <silent> <leader>gC :Commits<CR>
 nmap <silent> <leader>gB :Commits<CR>
 " }}}
+
+" vdebug {{{
+let g:vdebug_keymap = {
+\    "run" : ",dr",
+\    "run_to_cursor" : ",dR",
+\    "step_over" : ",dl",
+\    "step_into" : ",dj",
+\    "step_out" : ",dk",
+\    "close" : ",dq",
+\    "detach" : ",dD",
+\    "set_breakpoint" : ",ds",
+\    "eval_visual" : ",de"
+\}
+" }}}
 " }}}
 
 " Auto commands {{{
@@ -359,9 +366,6 @@ autocmd BufEnter *
 
 " Auto-close preview window after autocomplete
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
-
-" Load local configs
-autocmd BufReadPre * call LoadLocalConfig()
 
 " vim-lsp isn't starting correctly on enabled filetypes
 if has("win32")
@@ -429,6 +433,7 @@ Plug 'prabirshrestha/asyncomplete-lsp.vim', { 'for' : ['php', 'python'] }
 Plug 'ryanoasis/vim-devicons'
 
 Plug 'vim-vdebug/vdebug'
+Plug 'embear/vim-localvimrc'
 
 call plug#end()
 " }}}
@@ -585,6 +590,24 @@ au User lsp_setup call lsp#register_server({
             \ 'root_uri': {server_info->LspMapRoot()}})
 " }}}
 
+" vdebug {{{
+" Allows Vdebug to bind to all interfaces.
+let g:vdebug_options = copy(g:vdebug_options_defaults)
+
+" Stops execution at the first line.
+let g:vdebug_options['break_on_open'] = 1
+let g:vdebug_options['max_children'] = 128
+
+" Use the compact window layout.
+let g:vdebug_options['watch_window_style'] = 'compact'
+
+" Because it's the company default.
+let g:vdebug_options['ide_key'] = 'vdebug'
+
+
+" Need to set as empty for this to work with Vagrant boxes.
+let g:vdebug_options['server'] = 'localhost'
+" }}}
 " }}}
 
 " Custom highlighting {{{
