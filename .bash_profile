@@ -12,7 +12,7 @@ PATHS=( \
     $HOME/.fzf/bin \
 )
 for path in ${PATHS[*]};do
-    if [[ ! "${PATH}" == *${path}:* ]];then
+    if [[ -d "${path}" ]] && [[ ! "${PATH}" == *${path}:* ]];then
         PATH=${path}:${PATH}
     fi
 done
