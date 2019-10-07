@@ -172,7 +172,8 @@ function bash_prompt_2line {
     git=$(parse_git_branch)
     PS1="${PS1}${git}"
 
-    virtualenv= [ ! -z $VIRTUAL_ENV ] && virtualenv=" py: "$(basename $VIRTUAL_ENV)
+    virtualenv=
+    [ ! -z "$VIRTUAL_ENV" ] && virtualenv=" py: "$(basename $VIRTUAL_ENV)
     PS1="${PS1}${virtualenv}"
 
     PS1="${PS1}${exit_code}"

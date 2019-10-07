@@ -1,13 +1,23 @@
-# .bash_profile
-
+# .bash_profile 
 # Get the aliases and functions
 if [ -f ~/.bashrc ]; then
 	. ~/.bashrc
 fi
 
 # User specific environment and startup programs
+PATHS=( \
+    $HOME/.pyenv/bin \
+    $HOME/.local/bin \
+    $HOME/bin \
+    $HOME/.fzf/bin \
+)
+for path in ${PATHS[*]};do
+    if [[ ! "${PATH}" == *${path}:* ]];then
+        PATH=${path}:${PATH}
+    fi
+done
+export PATH
 
-PATH=$PATH:$HOME/bin:$HOME/.fzf/bin
 BASE16_SHELL_SET_BACKGROUND=false
 #FZF_TMUX=1
 
