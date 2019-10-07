@@ -439,7 +439,6 @@ call plug#end()
 " }}}
 
 " Plugin settings {{{
-
 " lightline.vim {{{
 let g:lightline = {
             \ 'colorscheme': 'murmur',
@@ -591,22 +590,29 @@ au User lsp_setup call lsp#register_server({
 " }}}
 
 " vdebug {{{
-" Allows Vdebug to bind to all interfaces.
-let g:vdebug_options = copy(g:vdebug_options_defaults)
-
-" Stops execution at the first line.
-let g:vdebug_options['break_on_open'] = 1
-let g:vdebug_options['max_children'] = 128
-
-" Use the compact window layout.
-let g:vdebug_options['watch_window_style'] = 'compact'
-
-" Because it's the company default.
-let g:vdebug_options['ide_key'] = 'vdebug'
-
-
-" Need to set as empty for this to work with Vagrant boxes.
-let g:vdebug_options['server'] = 'localhost'
+let g:vdebug_options = {
+            \ 'simplified_status': 1,
+            \ 'debug_file': '',
+            \ 'debug_file_level': 0,
+            \ 'watch_window_style': 'expanded',
+            \ 'marker_default': '⬦',
+            \ 'continuous_mode': 1,
+            \ 'ide_key': 'vdebug',
+            \ 'break_on_open': 1,
+            \ 'sign_current': '▶',
+            \ 'on_close': 'stop',
+            \ 'path_maps': {},
+            \ 'auto_start': 1,
+            \ 'layout': 'vertical',
+            \ 'sign_disabled': '▌▌',
+            \ 'sign_breakpoint': '▷',
+            \ 'marker_closed_tree': '▸',
+            \ 'background_listener': 1,
+            \ 'timeout': 20,
+            \ 'port': 9000,
+            \ 'marker_open_tree': '▾',
+            \ 'debug_window_level': 0,
+            \ 'server': ''}
 " }}}
 " }}}
 
